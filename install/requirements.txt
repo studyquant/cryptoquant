@@ -1,0 +1,15 @@
+apscheduler
+deap
+peewee
+pymongo 
+ccxt
+schedule
+pandas
+bs4
+matplotlib
+lxml
+tushare
+django
+msgpack
+itchat
+dataclasses
