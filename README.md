@@ -17,7 +17,7 @@ CryptoQuant是一套基于Python的量化交易框架，帮助个人/机构量�
 
 ## Features
 - Ease of Use: CryptoQuant tries to get out of your way so that you can focus on algorithm development. 
-- **开箱即用 ** ： CryptoQuant提供一套量化框架帮助您专注策略开发
+- **开箱即用** ： CryptoQuant提供一套量化框架帮助您专注策略开发
 - **回测**：回测框架支持数据导入，自定义交易订单号，多线程回测、遗传算法寻优等功能
 - **实盘交易**： 框架提供数字货币交易所接口DEMO
 - **文档支持**:[**官方社区论坛**](https://docs.studyquant.com/)
@@ -150,11 +150,11 @@ order_data = exchange.buy(symbol,3,1)
 
 - 添加了APIGATEWAY 模板
 
-- 添加了实盘交易DEMO
 
-- 完善了回测框架
-
-
+- 支持回测，遗传算法调优。
+- 数据导入
+- 自定义订单号
+- 实盘交易demo
 
 2020-08-15    v1.0
 
