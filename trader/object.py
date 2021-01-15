@@ -111,13 +111,14 @@ class OrderData(BaseData):
     orderid: str
 
     type: OrderType = OrderType.LIMIT
-    direction: Direction = ""
+    direction: Direction = None
     offset: Offset = Offset.NONE
     price: float = 0
     volume: float = 0
     traded: float = 0
     status: Status = Status.SUBMITTING
-    time: str = ""
+    datetime: datetime = None
+    custom_id: str = ''  # 策略定制的订单ID
 
     def __post_init__(self):
         """"""
@@ -159,8 +160,7 @@ class TradeData(BaseData):
     offset: Offset = Offset.NONE
     price: float = 0
     volume: float = 0
-    time: str = ""
-
+    datetime: datetime = None
     def __post_init__(self):
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
@@ -279,6 +279,7 @@ class OrderRequest:
     volume: float
     price: float = 0
     offset: Offset = Offset.NONE
+    orderid: str = ''
 
     def __post_init__(self):
         """"""

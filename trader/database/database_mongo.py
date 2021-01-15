@@ -4,8 +4,8 @@ from typing import Optional, Sequence
 
 from mongoengine import DateTimeField, Document, FloatField, StringField, connect
 
-from vnpy.trader.constant import Exchange, Interval
-from vnpy.trader.object import BarData, TickData
+from cryptoquant.trader.constant import Exchange, Interval
+from cryptoquant.trader.object import BarData, TickData
 from .database import BaseDatabaseManager, Driver
 
 

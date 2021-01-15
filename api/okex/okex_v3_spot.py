@@ -3,6 +3,7 @@ from cryptoquant.api.okex.spot_api import SpotAPI
 import time
 import pandas as pd
 
+
 class OkexSpotV3(SpotAPI):
     # 获取当前实时K线数据
     def __init__(self,api_key, seceret_key, passphrase, server_time):
@@ -23,7 +24,6 @@ class OkexSpotV3(SpotAPI):
 
     def log(self,info):
         print(info)
-
 
     # K线数据处理
     def spot_kline(self, symbol, time_frame):
@@ -83,7 +83,6 @@ class OkexSpotV3(SpotAPI):
             data = self.take_order(
                 instrument_id, side, client_oid=client_oid, type=order_type, size=size, price= order_price , order_type='0',
                 notional='')
-
         else:
             # buy 必须填写  size
             #  必须填写
@@ -122,7 +121,6 @@ class OkexSpotV3(SpotAPI):
 
                 if self.short_position != 0:
                     self.cancel_all(self.symbol, 'short')
-
 
                 # order_list = self.get_order_list('0', '', '', '100', symbol) # 获取订单列表
                 # if order_list:

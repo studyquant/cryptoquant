@@ -1,15 +1,13 @@
 
 # coding: utf-8
 
-# In[ ]:
-
-
-#%%
-from cryptoquant.app.backtesting.backtesting import BacktestingEngine, OptimizationSetting
-from datetime import datetime
-from cryptoquant.app.strategies.MaStrategy import (
-    SQMA_strategy,
+from cryptoquant.app.cta_strategy.strategies.double_ma_strategy import (
+    DoubleMaStrategy,
 )
+from datetime import datetime
+from cryptoquant.app.cta_backtester.engine import BacktestingEngine, OptimizationSetting
+# from cryptoquant.app.cta_strategy.studyquant_backtesting import BacktestingEngine, OptimizationSetting
+
 
 #%%
 engine = BacktestingEngine()
@@ -27,14 +25,8 @@ engine.set_parameters(
 )
 
 setting = {}
-# setting['minutes'] = minutes
-# setting['short_ma_windows'] = 65
-# setting['long_ma_windows'] = 144
-# setting['symbol'] = symbol
-# setting['real_trading'] = False # 实盘交易，  模拟回测请选FALSE
-# setting['order_percent'] = 0.1 # 买入仓位为10%
 
-engine.add_strategy(SQMA_strategy,setting)
+engine.add_strategy(DoubleMaStrategy,setting)
 
 # 导入数据
 engine.load_data()

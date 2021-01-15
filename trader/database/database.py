@@ -4,8 +4,8 @@ from enum import Enum
 from typing import Optional, Sequence, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from vnpy.trader.constant import Interval, Exchange  # noqa
-    from vnpy.trader.object import BarData, TickData  # noqa
+    from cryptoquant.trader.constant import Interval, Exchange  # noqa
+    from cryptoquant.trader.object import BarData, TickData  # noqa
 
 
 class Driver(Enum):

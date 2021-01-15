@@ -1,3 +1,4 @@
-api_key = ''
-seceret_key = ''
-passphrase = ''
+# ok
+ok_api_key = ''
+ok_seceret_key = ''
+ok_passphrase = ''

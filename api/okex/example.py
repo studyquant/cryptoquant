@@ -12,9 +12,6 @@ if __name__ == '__main__':
     seceret_key = ""
     passphrase = ""
 
-
-
-
     # account api test
     accountAPI = account.AccountAPI(api_key, seceret_key, passphrase, True)
     # 钱包账户信息

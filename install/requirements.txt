@@ -8,8 +8,6 @@ pandas
 bs4
 matplotlib
 lxml
-tushare
-django
 msgpack
 itchat
 dataclasses

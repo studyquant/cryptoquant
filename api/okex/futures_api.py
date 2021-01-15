@@ -69,7 +69,6 @@ class FutureAPI(Client):
             return self._request_without_params(POST, FUTURE_REVOKE_ORDER + str(instrument_id) + '/' + str(order_id))
         elif client_oid:
             return self._request_without_params(POST, FUTURE_REVOKE_ORDER + str(instrument_id) + '/' + str(client_oid))
-
     # revoke orders
 
     def revoke_orders(self, instrument_id, order_ids='', client_oids=''):

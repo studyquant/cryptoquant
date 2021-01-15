@@ -19,7 +19,7 @@ from datetime import datetime
 from cryptoquant.trader.object import BarData
 
 
-def studyquant_save_data_to_vnpy(symbol, df,exchange):
+def save_data_to_cryptoquant(symbol, df,exchange):
     """
     将数据导入VNPY数据库
     :param symbol:  存入的标的名
@@ -60,21 +60,6 @@ def studyquant_save_data_to_vnpy(symbol, df,exchange):
     database_manager.save_bar_data(bars)
     print("插入数据", start, "-", end, "总数量：", count)
 
-def studyquant_get_data_from_jqdata(symbol, start_date, end_date,frequency):
-    """
-    :return:
-    """
-    data1 = jqdatasdk.get_price(symbol, start_date=start_date, end_date=end_date, frequency=frequency)  # 获得000001.XSHG的2015年12月1号14:00-2015年12月2日12:00的分钟数据
-    print(data1.head())
-    data1 = data1.dropna()
-    data1['index1'] = data1.index
-    data1['Date'] = data1['index1'].map(lambda x: str(x)[0:10])
-    data1['Time'] = data1['index1'].map(lambda x: str(x)[11:])
-    data1['volume'] = data1['volume'].map(lambda x: int(x))
-    data2 = data1[['Date', 'Time', 'open', 'high', 'low', 'close', 'volume']]
-    data2.columns = ['Date', 'Time', 'Open', 'High', 'Low', 'Close', 'TotalVolume']
-    print('下载完成')
-    return data2
 
 
 if __name__=="__main__":

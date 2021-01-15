@@ -295,6 +295,7 @@ class BarGenerator:
         self.on_bar(self.bar)
         self.bar = None
 
+import pandas as pd
 
 class ArrayManager(object):
     """
@@ -314,6 +315,33 @@ class ArrayManager(object):
         self.low_array = np.zeros(size)
         self.close_array = np.zeros(size)
         self.volume_array = np.zeros(size)
+
+    def update_kline(self, kline:pd.DataFrame) -> None:
+        """
+        Args:
+            data: kline dataframe, close, open, high, low
+        Returns: None
+        """
+        self.open_array = kline['open']
+
+    def get_dataframe(self) -> None:
+        """
+        Args:
+            data: kline dataframe, close, open, high, low
+        Returns: None
+        """
+        df = pd.DataFrame()
+        df['open'] = self.open_array
+        df['high'] = self.high_array
+        df['low'] = self.low_array
+        df['close'] = self.close_array
+        df['volume'] = self.volume_array
+        df['open'] = self.close_array
+        # df = pd.DataFrame([self.open_array,self.high_array,self.low_array,self.close_array,self.volume_array ],columns=[['open','high','low','close','volume']])
+        return df
+
+
+
 
     def update_bar(self, bar):
         """

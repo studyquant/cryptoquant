@@ -4,14 +4,13 @@
 导入JQDATA数据至VNPY
 """
 from cryptoquant.trader.constant import Direction, Exchange, Interval, Offset, Status, Product, OptionType, OrderType
-from cryptoquant.trader.database import database_manager
 import pandas as pd
-from cryptoquant.app.data_manage.data_manager import studyquant_save_data_to_vnpy
+from cryptoquant.app.data_manage.data_manager import save_data_to_cryptoquant
 
 if __name__ == '__main__':
     df = pd.read_csv('IF9999.csv')
     symbol = 'IF9999'
-    studyquant_save_data_to_vnpy(symbol, df, Exchange.CFFEX)
+    save_data_to_cryptoquant(symbol, df, Exchange.CFFEX)
 
     # data = pd.read_csv('dataMerged_XBTUSD_2017-01-01_to_2020-04-26.csv')
     # #数据清洗
