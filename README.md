@@ -142,3 +142,20 @@ order_data = exchange.buy(symbol,3,1)
   * 使用[autopep8](https://github.com/hhatto/autopep8)格式化你的代码。运行```autopep8 --in-place --recursive . ```即可。
   * 使用[flake8](https://pypi.org/project/flake8/)检查你的代码，确保没有error和warning。在项目根目录下运行```flake8```即可。
 
+
+
+## 开发日志
+
+2021-01-15    v1.1
+
+- 添加了APIGATEWAY 模板
+
+- 添加了实盘交易DEMO
+
+- 完善了回测框架
+
+
+
+2020-08-15    v1.0
+
+- 开源框架
