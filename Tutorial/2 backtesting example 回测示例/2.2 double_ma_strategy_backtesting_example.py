@@ -16,7 +16,7 @@ engine.set_parameters(
     vt_symbol="IF9999.CFFEX",
     interval= "1m",
     start=datetime(2020, 1, 1),
-    end=datetime(2020, 4, 30),
+    end=datetime(2021, 4, 30),
     rate=0.3/10000,
     slippage=0.5,
     size=300,

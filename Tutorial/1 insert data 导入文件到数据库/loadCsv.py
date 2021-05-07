@@ -1,23 +1,16 @@
-# -*- coding: utf-8 -*-#
-
-#-------------------------------------------------------------------------------
-# Name:         data_manager.py
-# Description:  
-# Author:       Rudy
-# U:            project
-# Date:         2020-03-30
-#-------------------------------------------------------------------------------
+# encoding: UTF-8
 
 """
-StudyQuant:项目制的量化投资学院，帮你快速入行量化交易。
-wechat:82789754
+导入JQDATA数据至VNPY
 """
+from cryptoquant.trader.constant import Direction, Exchange, Interval, Offset, Status, Product, OptionType, OrderType
+import pandas as pd
+# from cryptoquant.app.data_manage.data_manager import save_data_to_cryptoquant
 from cryptoquant.trader.constant import Direction, Exchange, Interval, Offset, Status, Product, OptionType, OrderType
 from cryptoquant.trader.database import database_manager
 # import jqdatasdk
 from datetime import datetime
 from cryptoquant.trader.object import BarData
-
 
 def save_data_to_cryptoquant(symbol, df,exchange):
     """
@@ -55,23 +48,30 @@ def save_data_to_cryptoquant(symbol, df,exchange):
         count += 1
         if not start:
             start = bar.datetime
-            
+
     end = bar.datetime
     database_manager.save_bar_data(bars)
     print("插入数据", start, "-", end, "总数量：", count)
 
 
+if __name__ == '__main__':
+    df = pd.read_csv('IF9999.csv')
+    symbol = 'IF9999'
+    save_data_to_cryptoquant(symbol, df, Exchange.CFFEX)
 
-if __name__=="__main__":
-    pass
-    
-    
-    
-    
-    
-    
-    
-"""
-好好学习，天天向上。 
-project
-"""
+    # data = pd.read_csv('dataMerged_XBTUSD_2017-01-01_to_2020-04-26.csv')
+    # #数据清洗
+    # df = pd.DataFrame()
+    # df['Open'] = data['open']
+    # df['Close'] = data['close']
+    # df['Low'] = data['low']
+    # df['High'] = data['high']
+    # df['TotalVolume'] = data['volume']
+    # df['Date'] =  [date[:10] for date in data['date']]
+    # df['Time'] =  [date[11:19] for date in data['date']]
+    #
+    # symbol = 'XBTUSD'
+    # studyquant_save_data_to_vnpy(symbol, df, Exchange.BITMEX)
+
+
+

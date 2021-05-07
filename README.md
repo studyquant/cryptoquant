@@ -6,7 +6,24 @@
     <img src ="https://img.shields.io/badge/python-3.7-blue.svg"/>
 </p>
 
+# 量化交易课程
+[**量化课程推荐**](https://appcop3i2898823.h5.xiaoeknow.com)
+
+
+# 交易所注册推荐码
+
+- OKEX 交易所注册推荐码, 手续费返佣**20%**
+  - <https://www.okex.win/join/2521074585>
+- 币安交易所注册推荐码, 手续费返佣 **10%**
+  - <https://www.binance.com/zh-CN/register?ref=TDBM1BYS>
+
+- 火币交易所注册推荐码, 手续费返佣 **15%**
+  - <https://www.huobi.ms/zh-cn/topic/double-reward/?invite_code=cgx22223>
+
+
+
 # cryptoquant
+
 CryptoQuant is an algorithmic trading library for crypto-assets written in Python. It allows trading strategies to be easily expressed and backtested against historical data (with daily and minute resolution), providing analytics and insights regarding a particular strategy's performance. cryptoquant also supportslive-trading of crypto-assets starting with many exchanges (Okex,Binance,Bitmex etc) with more being added over time.
 
 CryptoQuant是一套基于Python的量化交易框架，帮助个人/机构量化人员进行数字货币量化交易。框架具有回测/实盘交易功能。 策略框架支持多个平台切换回测。 并提供交易所实盘交易接口（如OKEX) 。
@@ -119,8 +136,17 @@ order_data = exchange.buy(symbol,3,1)
 # 卖单
 # order_data = exchange.sell(symbol, 6, 1)
 
-
 ```
+
+## 更多示例代码和维护的交易系统
+
+For more demo code and strategy demo, Please check the course, some homeworks may required to completed.
+
+[**1.0 数字货币量化课程**](https://appcop3i2898823.h5.xiaoeknow.com/v1/course/column/p_5fad5331e4b0231ba88619aa?type=3)
+
+[**2.0 Python领域开发入门**](https://appcop3i2898823.h5.xiaoeknow.com/v1/course/column/p_5faf6fb6e4b0231ba8866883?type=3)
+
+
 ## 捐助
 如果您觉得我们的开源软件对你有所帮助，请扫下方二维码购买课程支持。
 
@@ -131,7 +157,14 @@ order_data = exchange.buy(symbol,3,1)
 
 ## Questions?
 - QQ社群：1032965883
-如果无法解决请前往[**官方社区论坛**](https://docs.studyquant.com/)的
+- wechat:  82789754
+- 如果无法解决请前往[**官方社区论坛**](https://www.yuque.com/studyquant/cryptoquant)的
+
+  如果你有什么量化问题、python学习、课程咨询等问题，都可以咨询我。
+
+<p align="center">
+    <img src ="https://raw.githubusercontent.com/studyquant/pictures/main/82789754.jpg"/>
+</p>
 
 
 ## 贡献代码
@@ -145,6 +178,11 @@ order_data = exchange.buy(symbol,3,1)
 
 
 ## 开发日志
+
+2021-05-07    v1.2
+更改目录结构
+增加文档链接
+文档补充
 
 2021-01-15    v1.1
 

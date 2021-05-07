@@ -1,4 +1,0 @@
-   
-pip install websocket
-namespaceHTMLElements=False,
-TypeError: parse() got an unexpected keyword argument 'transport_encoding'
