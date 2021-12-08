@@ -13,6 +13,8 @@ wechat:82789754
 #     g_secret_key = ''
 
 
+binance_api_key = ''
+binance_secret_key = ''
 ok_api_key = ''
 ok_seceret_key = ''
 ok_passphrase = ''

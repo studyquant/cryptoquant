@@ -101,40 +101,61 @@ engine.show_chart()
 
 
 ```Python
-from cryptoquant.trader.constant import Direction, Exchange, Interval, Offset, Status, Product, OptionType, OrderType
-import pandas as pd
-from cryptoquant.app.data_manage.data_manager import save_data_to_cryptoquant
 
-if __name__ == '__main__':
-    df = pd.read_csv('IF9999.csv')
-    symbol = 'IF9999'
-    save_data_to_cryptoquant(symbol, df, Exchange.CFFEX)
     
 ```
 
 ### 实盘交易
 ```Python
-from cryptoquant.api.okex.okex_spot_exchange import OkexSpotApi
-#导入交易所接口密钥
-from cryptoquant.config.config import ok_api_key, ok_seceret_key, ok_passphrase
-from cryptoquant.api.okex.spot_api import SpotAPI
-from cryptoquant.api.api_gateway.apigateway import ApiGateway
 
-# 实例化OKEX接口的类
-api = SpotAPI(ok_api_key, ok_seceret_key, ok_passphrase, True)
-# 实例化自己封装好接口类
-api_gateway = OkexSpotApi(api)
-# 实例化策略与交易所接口之间的中间通道类
-exchange = ApiGateway(api_gateway)
-kline_df = exchange.get_kline_data(symbol, minutes)
-print(kline_df)
-ticker = exchange.get_ticker(symbol)
-print(ticker)
+from cryptoquant.api.api_gateway.build.apigateway_v7 import get_exchange
+from cryptoquant.config.config import ok_api_key, ok_seceret_key, ok_passphrase,binance_api_key,binance_secret_key
 
-# 买单
-order_data = exchange.buy(symbol,3,1)
-# 卖单
-# order_data = exchange.sell(symbol, 6, 1)
+
+
+if __name__ == "__main__":
+    setting ={
+        'symbol':"EOS/USDT",
+        'api_key':binance_api_key,
+        'secret':binance_secret_key,
+        'base_asset':'EOS',
+        'quote_asset':'USDT',
+        'sleep_time':5,
+        'time_frame':'5m'
+    }
+
+    apikey = binance_api_key
+    secret = binance_secret_key
+    symbol = "EOS/USDT"
+    time_frame = '5m'
+    strategy_name = 'apidemo'
+
+    exchange = get_exchange(symbol, apikey, secret, time_frame, strategy_name, setting)
+
+    print('GEt Trades', exchange.GetTrades())
+    print('GEt Ticker',exchange.GetTicker())
+    print('GEt Depth',exchange.GetDepth())
+    print('GetAccount',exchange.GetAccount())
+    print('获取K线',exchange.GetKline(time_frame))
+    print('get Orders',exchange.GetOrders())
+    print('get open Orders',exchange.GetOpenOrders())
+
+    # 买单
+    buy_order = exchange.Buy(Price = 3,Amount = 4)
+    print(f"获取订单{exchange.GetOrder(buy_order.id)}")
+
+    # 撤单
+    cancel_order = exchange.CancelOrder(buy_order.id)
+    print(f"取消订单{cancel_order}")
+
+    # 卖单
+    sell_order = exchange.Sell(Price = 5,Amount = 4)
+    print(f"获取订单{exchange.GetOrder(buy_order.id)}")
+
+    # 撤单
+    cancel_order = exchange.CancelOrder(sell_order.id)
+    print(f"取消订单{cancel_order}")
+
 
 ```
 
@@ -179,7 +200,18 @@ For more demo code and strategy demo, Please check the course, some homeworks ma
 
 ## 开发日志
 
+2021-12-09    v1.3
+
+- 更新BINANCE封装好的接口
+
+- 更新 CCXT接口教学
+
+- 添加 定投策略示例
+
+
+
 2021-05-07    v1.2
+
 更改目录结构
 增加文档链接
 文档补充

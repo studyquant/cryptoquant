@@ -343,37 +343,27 @@ class OkexSpotApi():
         :param req:  请求的CLASS
         :return: orderid
         """
-        try:
-            orderid = f"a{self.connect_time}{self._new_order_id()}"
-            # order_id = self.order_manager.new_local_orderid()
-            data = {
-                "client_oid": orderid,
-                "type": ORDERTYPE_VT2OKEX[req.type],
-                "side": DIRECTION_VT2OKEX[req.direction],
-                "instrument_id": req.symbol
-            }
+        orderid = f"a{self.connect_time}{self._new_order_id()}"
+        # order_id = self.order_manager.new_local_orderid()
+        data = {
+            "client_oid": orderid,
+            "type": ORDERTYPE_VT2OKEX[req.type],
+            "side": DIRECTION_VT2OKEX[req.direction],
+            "instrument_id": req.symbol
+        }
 
-            order = req.create_order_data(orderid, self.exchange_name)
-            # 发送订单
-            data = self.create_order( instrument_id = req.symbol,
-                                       order_price = req.price,
-                                       size = req.volume,
-                                       type = data['type'],
-                                       side = data['side'],
-                                       client_oid = req.orderid
-                                       )
-
-            if data['result']:
-                return data['order_id']
-            else:
-                return False
-        except Exception as err:
-            print(err)
-            return False
-
+        order = req.create_order_data(orderid, self.exchange_name)
+        # 发送订单
+        data = self.create_order( instrument_id = req.symbol,
+                                   order_price = req.price,
+                                   size = req.volume,
+                                   type = data['type'],
+                                   side = data['side'],
+                                   client_oid = req.orderid
+                                   )
         # if data['result']:
-        #
         #     self.on_order(order)
+        return data
 
     def _new_order_id(self):
         with self.order_count_lock:
@@ -436,8 +426,8 @@ if __name__=="__main__":
     # OkexRestApi.connect(crypto_setting)
 
     # 获取币对的账户信息
-    coin = symbol.split('-')[0]
-    account_info = exchange.get_coin_account_info(coin)
+    # coin = symbol.split('-')[0]
+    # account_info = exchange.get_coin_account_info(coin)
     # # 获取TICK
     # tick_data = exchange.GetTicker(symbol)
     # # 获取K线

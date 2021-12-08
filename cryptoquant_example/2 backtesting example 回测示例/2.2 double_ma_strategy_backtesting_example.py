@@ -1,16 +1,12 @@
 
 # coding: utf-8
 
-# In[ ]:
-
-
-#%%
+from cryptoquant.app.cta_strategy.strategies.double_ma_strategy import (
+    DoubleMaStrategy,
+)
 from datetime import datetime
 from cryptoquant.app.cta_backtester.engine import BacktestingEngine, OptimizationSetting
 # from cryptoquant.app.cta_strategy.studyquant_backtesting import BacktestingEngine, OptimizationSetting
-from cryptoquant.app.cta_strategy.strategies.atr_rsi_strategy import (
-    AtrRsiStrategy,
-)
 
 
 #%%
@@ -18,7 +14,7 @@ engine = BacktestingEngine()
 
 engine.set_parameters(
     vt_symbol="IF9999.CFFEX",
-    interval="1m",
+    interval= "1m",
     start=datetime(2020, 1, 1),
     end=datetime(2020, 4, 30),
     rate=0.3/10000,
@@ -29,15 +25,20 @@ engine.set_parameters(
 )
 
 setting = {}
-engine.add_strategy(AtrRsiStrategy,setting)
+
+engine.add_strategy(DoubleMaStrategy,setting)
+
 # 导入数据
 engine.load_data()
+
 # 开始回测
 engine.run_backtesting()
 #计算收益
 df = engine.calculate_result()
+
 # 开始统计
 engine.calculate_statistics()
+
 # 开始画图
 engine.show_chart()
 

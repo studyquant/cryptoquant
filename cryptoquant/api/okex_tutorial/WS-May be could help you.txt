@@ -1,0 +1,10 @@
+
+If you get a little confused：
+
+websockets 入门文档： https://websockets.readthedocs.io/en/stable/intro.html
+websockets python github： https://github.com/aaugustin/websockets
+websockets 常见问题： https://websockets.readthedocs.io/en/stable/faq.html#client-side
+关于code=1006错误：
+https://github.com/Rapptz/discord.py/issues/1996
+https://github.com/aaugustin/websockets/issues/587
+使用asyncio开发： https://docs.python.org/3/library/asyncio-dev.html

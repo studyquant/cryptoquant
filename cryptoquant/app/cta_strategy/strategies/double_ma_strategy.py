@@ -8,16 +8,16 @@ from cryptoquant.app.cta_strategy import (
     BarGenerator,
     ArrayManager,
 )
-from cryptoquant.api.okex.okex_spot_exchange import OkexSpotApi
-from cryptoquant.config.config import ok_api_key, ok_seceret_key, ok_passphrase
-from cryptoquant.api.okex.spot_api import SpotAPI
+#from cryptoquant.api.okex.okex_spot_exchange import OkexSpotApi
+#from cryptoquant.config.config import ok_api_key, ok_seceret_key, ok_passphrase
+#from cryptoquant.api.okex.spot_api import SpotAPI
 from cryptoquant.trader.object import OrderData, Direction, Exchange, Interval, Offset, Status, Product, OptionType, \
     OrderType, TradeData, ContractData
 
 
 
 class DoubleMaStrategy(CtaTemplate):
-    author = "用Python的交易员"
+    author = ""
 
     fast_window = 10
     slow_window = 20
@@ -39,7 +39,13 @@ class DoubleMaStrategy(CtaTemplate):
         # OkexSpotApi.__init__(self, api)
         self.symbol = vt_symbol
         # self.bg = BarGenerator(self.on_bar)
-        self.bg15 = BarGenerator(self.on_bar, 2, self.on_15min_bar,Interval.HOUR)
+
+        # 这里使用的是5分钟K线
+        # self.bg15 = BarGenerator(self.on_bar, 5, self.on_15min_bar,Interval.MINUTE)
+        # self.am15 = ArrayManager()
+
+        # 这里使用的是2小时K线
+        self.bg15 = BarGenerator(self.on_bar, 1, self.on_15min_bar,Interval.HOUR)
         self.am15 = ArrayManager()
 
         self.am = ArrayManager()
