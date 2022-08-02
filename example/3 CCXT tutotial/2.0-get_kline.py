@@ -4,8 +4,10 @@
 * author: Rudy
 * wechat:82789754
 =========================================================
+* 更多量化示例代码可添加微信 studyquant88 领取 
+
 * Product Page: https://studyquant.com
-* Copyright 2021 StudyQuant
+* Copyright 2022 StudyQuant
 * License (https://studyquant.com/)
 * Coded by https://studyquant.com
 =========================================================

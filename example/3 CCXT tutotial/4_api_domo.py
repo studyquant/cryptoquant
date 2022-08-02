@@ -1,10 +1,29 @@
-#from cryptoquant.api.api_gateway.build.exchange import get_exchange
-#from cryptoquant.api.api_gateway.exchange import get_exchange
+# -*- coding: utf-8 -*-
+"""
+=========================================================
+* Powered by StudyQuant
+* author: Rudy
+* wechat:82789754
+================更多课程代码，请查看课程目录===============================
+* 更多量化示例代码可添加微信 studyquant88 领取 
 
-from cryptoquant.api.api_gateway.build.apigateway_v7 import get_exchange
+* Product Page: https://studyquant.com
+* Copyright 2022 StudyQuant
+* License (https://studyquant.com/)
+* Coded by https://studyquant.com
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+
+"""
 from cryptoquant.config.config import ok_api_key, ok_seceret_key, ok_passphrase,binance_api_key,binance_secret_key
+from cryptoquant import get_exchange
 
-
+"""
+Attention:
+to run this code file , your python may need to be python3.9. It can be run by my environment
+of  python 3.9. Hope you can run it successfully. Many Thanks 
+"""
 
 if __name__ == "__main__":
     setting ={
