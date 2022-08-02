@@ -5,12 +5,16 @@ wechat:82789754
 """
 import logging
 
+
 class StrategyLogger(logging.Logger):
-    def __init__(self, name,
-                 file=None,
-                 level="INFO",
-                 fmt="%(asctime)s| %(name)s | %(message)s",
-                 datefmt="%Y-%m-%d %H:%M:%S"):
+    def __init__(
+        self,
+        name,
+        file=None,
+        level="INFO",
+        fmt="%(asctime)s| %(name)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    ):
         super().__init__(name, level)
 
         self.fmt = fmt
@@ -54,11 +58,11 @@ def log_engine(name):
     logger = logging.getLogger(name)
     logger.setLevel(level=logging.INFO)
 
-    rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
+    rq = time.strftime("%Y%m%d%H%M", time.localtime(time.time()))
     current_path = os.getcwd()
-    path = os.path.join(current_path, 'log')
+    path = os.path.join(current_path, "log")
     # log_path = os.path.dirname(os.getcwd()) + '/logs/'
-    log_name = path + rq + '.txt'
+    log_name = path + rq + ".txt"
 
     handler = logging.FileHandler(log_name)
     handler.setLevel(logging.INFO)
@@ -66,7 +70,9 @@ def log_engine(name):
     logger.addHandler(handler)
 
     # 设置格式
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     handler.setFormatter(formatter)
     # logger.addHandler(handler)
     # 写在文件中
@@ -83,8 +89,7 @@ def log_engine(name):
     return logger
 
 
-class LogEngine():
-
+class LogEngine:
     def __init__(self, name):
         self.log = log_engine(name)
 
@@ -99,7 +104,7 @@ if __name__ == "__main__":
     # logger2 = log_engine(';test')
     # logger2 = StrategyLogger('name')
     # logger2.warning('okex | test')
-    log = LogEngine('start')
-    log.info('start')
+    log = LogEngine("start")
+    log.info("start")
 
-    log.info('start')
+    log.info("start")

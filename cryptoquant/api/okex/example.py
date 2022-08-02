@@ -6,7 +6,7 @@ import okex.swap_api as swap
 import json
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     api_key = ""
     seceret_key = ""
@@ -39,8 +39,6 @@ if __name__ == '__main__':
     # 提币手续费
     # result = accountAPI.get_coin_fee('btc')
 
-
-
     # spot api test
     spotAPI = spot.SpotAPI(api_key, seceret_key, passphrase, True)
     # 币币账户信息
@@ -63,7 +61,6 @@ if __name__ == '__main__':
     # params=[{"instrument_id": "OKB-USDT", "order_ids": ['3418277475195904','3418277475195905']},
     #         {"instrument_id": "XRP-USDT", "order_ids": ['3418281972599808','3418281972599809']}]
     # result = spotAPI.revoke_orders(params)
-
 
     # 获取订单列表
     # result = spotAPI.get_orders_list('2','xrp-usdt','','',100)
@@ -100,7 +97,6 @@ if __name__ == '__main__':
 
     # 获取指数成分
     # result = spotAPI.get_index('BTC-USD')
-
 
     # future api test
     futureAPI = future.FutureAPI(api_key, seceret_key, passphrase, True)
@@ -190,8 +186,6 @@ if __name__ == '__main__':
     # 获取委托单列表
     # result = futureAPI.order_algo_list('XRP-USD-191011', '1', '2','')
 
-
-
     # future api test 永续合约
     swapAPI = swap.SwapAPI(api_key, seceret_key, passphrase, True)
     # 获取所有合约持仓信息接口
@@ -267,8 +261,6 @@ if __name__ == '__main__':
     # 获取委托单列表
     # result = swapAPI.order_algo_list('BTC-USD-SWAP', '1', '','325633518317543424')
 
-
-
     # level api test
     levelAPI = lever.LeverAPI(api_key, seceret_key, passphrase, True)
     # 币币杠杆账户信息
@@ -290,7 +282,9 @@ if __name__ == '__main__':
     # 还币
     # result = levelAPI.repayment_coin('846888','BTC-USDT','BTC', '0.00100001')
     # 下单
-    result = levelAPI.take_order('abc123456','limit', 'sell', 'TRX-USDT', '2', '10','0.2835')
+    result = levelAPI.take_order(
+        "abc123456", "limit", "sell", "TRX-USDT", "2", "10", "0.2835"
+    )
     # 批量下单
     # params = [{"client_oid":"a2018","instrument_id":"TRX-USDT","side":"sell","type":"limit","size":"10","price":"0.2835","margin_trading":"2"},
     #          {"client_oid":"b2018","instrument_id":"TRX-USDT","side":"sell","type":"limit","size":"10","price":"0.2835","margin_trading":"2"}]
@@ -307,6 +301,5 @@ if __name__ == '__main__':
     # result = levelAPI.get_order_pending()
     # 获取成交明细
     # result = levelAPI.get_fills('2403463530818560','XRP-USDT','','','')
-
 
     print(json.dumps(result))

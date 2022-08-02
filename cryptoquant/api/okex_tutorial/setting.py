@@ -1,7 +1,3 @@
-    
-
-
-api_key = ''
-secret_key = ''
-passphrase = ''
-
+api_key = ""
+secret_key = ""
+passphrase = ""

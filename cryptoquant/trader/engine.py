@@ -20,7 +20,7 @@ from .event import (
     EVENT_POSITION,
     EVENT_ACCOUNT,
     EVENT_CONTRACT,
-    EVENT_LOG
+    EVENT_LOG,
 )
 from .gateway import BaseGateway
 from .object import (
@@ -28,7 +28,7 @@ from .object import (
     LogData,
     OrderRequest,
     SubscribeRequest,
-    HistoryRequest
+    HistoryRequest,
 )
 from .setting import SETTINGS
 from .utility import get_folder_path, TRADER_DIR
@@ -52,8 +52,8 @@ class MainEngine:
         self.apps = {}
         self.exchanges = []
 
-        os.chdir(TRADER_DIR)    # Change working directory
-        self.init_engines()     # Initialize function engines
+        os.chdir(TRADER_DIR)  # Change working directory
+        self.init_engines()  # Initialize function engines
 
     def add_engine(self, engine_class: Any):
         """
@@ -183,8 +183,7 @@ class MainEngine:
             gateway.cancel_order(req)
 
     def send_orders(self, reqs: Sequence[OrderRequest], gateway_name: str):
-        """
-        """
+        """ """
         gateway = self.get_gateway(gateway_name)
         if gateway:
             return gateway.send_orders(reqs)
@@ -192,8 +191,7 @@ class MainEngine:
             return ["" for req in reqs]
 
     def cancel_orders(self, reqs: Sequence[CancelRequest], gateway_name: str):
-        """
-        """
+        """ """
         gateway = self.get_gateway(gateway_name)
         if gateway:
             gateway.cancel_orders(reqs)
@@ -261,9 +259,7 @@ class LogEngine(BaseEngine):
         self.logger = logging.getLogger("VN Trader")
         self.logger.setLevel(self.level)
 
-        self.formatter = logging.Formatter(
-            "%(asctime)s  %(levelname)s: %(message)s"
-        )
+        self.formatter = logging.Formatter("%(asctime)s  %(levelname)s: %(message)s")
 
         self.add_null_handler()
 
@@ -300,16 +296,14 @@ class LogEngine(BaseEngine):
         log_path = get_folder_path("log")
         file_path = log_path.joinpath(filename)
 
-        file_handler = logging.FileHandler(
-            file_path, mode="a", encoding="utf8"
-        )
+        file_handler = logging.FileHandler(file_path, mode="a", encoding="utf8")
         file_handler.setLevel(self.level)
         file_handler.setFormatter(self.formatter)
         self.logger.addHandler(file_handler)
 
     def register_event(self):
         """"""
-        print('log event register')
+        print("log event register")
         self.event_engine.register(EVENT_LOG, self.process_log_event)
 
     def process_log_event(self, event: Event):
@@ -534,9 +528,7 @@ class EmailEngine(BaseEngine):
                 with smtplib.SMTP_SSL(
                     SETTINGS["email.server"], SETTINGS["email.port"]
                 ) as smtp:
-                    smtp.login(
-                        SETTINGS["email.username"], SETTINGS["email.password"]
-                    )
+                    smtp.login(SETTINGS["email.username"], SETTINGS["email.password"])
                     smtp.send_message(msg)
             except Empty:
                 pass

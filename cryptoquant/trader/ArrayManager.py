@@ -11,7 +11,8 @@ def crossover(a, b):
         return True
     else:
         return False
-    
+
+
 def crossunder(a, b):
     """向下突破"""
     if a[-2] > b[-2] and a[-1] < b[-1]:
@@ -21,34 +22,32 @@ def crossunder(a, b):
 
 
 def current_minute(minutes):
-    minutes = int(minutes.strip('m'))
+    minutes = int(minutes.strip("m"))
     now_time = datetime.now().minute
     if now_time % minutes == 0:
         return now_time
     else:
         now_time -= now_time % minutes
         return now_time
-        
-def scheduleTime(minutes,plus_minute = 1):
-    '''更新时间'''
-    minute = int(minutes.strip('m'))
+
+
+def scheduleTime(minutes, plus_minute=1):
+    """更新时间"""
+    minute = int(minutes.strip("m"))
     total_time = []
     inited_time = datetime(2019, 1, 1, 00, 00, 00, 0)
-    for i in range(int(24 * 60/minute)):
-        inited_time +=  timedelta(minutes = minute) 
-        newtime = inited_time + timedelta(minutes = plus_minute) 
+    for i in range(int(24 * 60 / minute)):
+        inited_time += timedelta(minutes=minute)
+        newtime = inited_time + timedelta(minutes=plus_minute)
         total_time.append(newtime)
-        
+
     total_time = pd.to_datetime(total_time)
     schedule_time = []
     for time2 in total_time:
         target_time = str(time2)[-8:-3]
-#            print (target_time)
+        #            print (target_time)
         schedule_time.append(target_time)
     return schedule_time
-
-
-
 
 
 ########################################################################
@@ -171,8 +170,9 @@ class ArrayManager(object):
     # ----------------------------------------------------------------------
     def macd(self, fastPeriod, slowPeriod, signalPeriod, array=False):
         """MACD指标"""
-        macd, signal, hist = talib.MACD(self.close, fastPeriod,
-                                        slowPeriod, signalPeriod)
+        macd, signal, hist = talib.MACD(
+            self.close, fastPeriod, slowPeriod, signalPeriod
+        )
         if array:
             return macd, signal, hist
         return macd[-1], signal[-1], hist[-1]
@@ -188,7 +188,9 @@ class ArrayManager(object):
     # ----------------------------------------------------------------------
     def boll2(self, n, k, array=False):
         """ADX指标"""
-        upper, middle, lower = talib.BBANDS(self.close, timeperiod=n, nbdevup=k, nbdevdn=k, matype=0)
+        upper, middle, lower = talib.BBANDS(
+            self.close, timeperiod=n, nbdevup=k, nbdevdn=k, matype=0
+        )
         #    print(upper, middle, lower)
         if array:
             return upper, middle, lower
@@ -227,8 +229,6 @@ class ArrayManager(object):
             return up, down
         return up[-1], down[-1]
 
-
-
     # ----------------------------------------------------------------------
     @staticmethod
     def MACD_signal(MACD2):
@@ -244,19 +244,19 @@ class ArrayManager(object):
 
     # ----------------------------------------------------------------------
     def MACD_diff(position, hist, close):
-        '''
+        """
         a:记录所有MACD交叉点
         i:索引最近出现的交叉点
-        '''
+        """
         record_result = []
         for i in range(len(hist)):
             # 金叉
             if i >= 2:
-                if hist[:i + 1][-2] < 0 and hist[:i + 1][-1] > 0:
+                if hist[: i + 1][-2] < 0 and hist[: i + 1][-1] > 0:
                     result = True
                     record_result.append(result)
                 # 死叉
-                elif hist[:i + 1][-2] > 0 and hist[:i + 1][-1] < 0:
+                elif hist[: i + 1][-2] > 0 and hist[: i + 1][-1] < 0:
                     result = False
                     record_result.append(result)
                 else:
@@ -275,16 +275,16 @@ class ArrayManager(object):
         # 计算上一个死叉的MACD总和：
         if last_true > last_false:
             final = hist[last_false:last_true]
-            print ('死叉转金叉 ： 死叉的面积')
+            print("死叉转金叉 ： 死叉的面积")
             gold_macd = True
 
         else:
             final = hist[last_true:last_false]
-            print ('金叉转死叉 ： 金叉的面积')
+            print("金叉转死叉 ： 金叉的面积")
             gold_macd = False
 
         if len(final) == 0:
-            print('转折点太近，面积为一个数')
+            print("转折点太近，面积为一个数")
             final = hist[last_true:last_false]
             lowest_close = min(close[last_true:last_false])  # 区间最小值
             largest_close = max(close[last_true:last_false])  # 区间最小值
@@ -298,7 +298,7 @@ class ArrayManager(object):
                 largest_close = max(close[last_true:last_false])  # 区间最小值
 
         total = sum(final)
-        print('total:%s' % (total))
+        print("total:%s" % (total))
         # print('final',final)
         #    print('lowest_close', lowest_close)
         #    print('largest_close',largest_close)

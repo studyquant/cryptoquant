@@ -6,7 +6,16 @@ from dataclasses import dataclass
 from datetime import datetime
 from logging import INFO
 
-from .constant import Direction, Exchange, Interval, Offset, Status, Product, OptionType, OrderType
+from .constant import (
+    Direction,
+    Exchange,
+    Interval,
+    Offset,
+    Status,
+    Product,
+    OptionType,
+    OrderType,
+)
 
 ACTIVE_STATUSES = set([Status.SUBMITTING, Status.NOTTRADED, Status.PARTTRADED])
 
@@ -95,10 +104,9 @@ class BarData(BaseData):
     close_price: float = 0
 
     # 临时加的属性
-    ask_price_1:float = 0
-    bid_price_1:float = 0
-    last_price:float = 0
-
+    ask_price_1: float = 0
+    bid_price_1: float = 0
+    last_price: float = 0
 
     def __post_init__(self):
         """"""
@@ -124,7 +132,7 @@ class OrderData(BaseData):
     traded: float = 0
     status: Status = Status.SUBMITTING
     datetime: datetime = datetime.now()
-    custom_id: str = ''  # 策略定制的订单ID
+    custom_id: str = ""  # 策略定制的订单ID
 
     def __post_init__(self):
         """"""
@@ -167,6 +175,7 @@ class TradeData(BaseData):
     price: float = 0
     volume: float = 0
     datetime: datetime = None
+
     def __post_init__(self):
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
@@ -241,17 +250,17 @@ class ContractData(BaseData):
     size: int
     pricetick: float
 
-    min_volume: float = 1           # minimum trading volume of the contract
-    stop_supported: bool = False    # whether server supports stop order
-    net_position: bool = False      # whether gateway uses net position volume
-    history_data: bool = False      # whether gateway provides bar history data
+    min_volume: float = 1  # minimum trading volume of the contract
+    stop_supported: bool = False  # whether server supports stop order
+    net_position: bool = False  # whether gateway uses net position volume
+    history_data: bool = False  # whether gateway provides bar history data
 
     option_strike: float = 0
-    option_underlying: str = ""     # vt_symbol of underlying contract
+    option_underlying: str = ""  # vt_symbol of underlying contract
     option_type: OptionType = None
     option_expiry: datetime = None
     option_portfolio: str = ""
-    option_index: str = ""          # for identifying options with same strike price
+    option_index: str = ""  # for identifying options with same strike price
 
     def __post_init__(self):
         """"""
@@ -285,7 +294,7 @@ class OrderRequest:
     volume: float
     price: float = 0
     offset: Offset = Offset.NONE
-    orderid: str = ''
+    orderid: str = ""
 
     def __post_init__(self):
         """"""
@@ -341,10 +350,8 @@ class HistoryRequest:
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
 
 
-
-
 @dataclass
-class Trade():
+class Trade:
     Info: None
     Id: int
     Time: int
@@ -357,14 +364,16 @@ class Trade():
     ContractType: str = ""
     Type: int = 0
 
+
 @dataclass
-class Ticker():
+class Ticker:
     """
     Tick data contains information about:
         * last trade in market
         * orderbook snapshot
         * intraday market statistics.
     """
+
     symbol: str
     exchange: Exchange
     datetime: datetime
@@ -377,8 +386,9 @@ class Ticker():
     Last: float = 0
     Volume: float = 0
 
+
 @dataclass
-class Record():
+class Record:
     Time: int
     Open: float = 0
     High: float = 0
@@ -386,8 +396,9 @@ class Record():
     Close: float = 0
     Volume: float = 0
 
+
 @dataclass
-class Order():
+class Order:
     Info: dict
     Id: int
     Status: int
@@ -398,21 +409,24 @@ class Order():
     Amount: float = 0
     DealAmount: float = 0
     AvgPrice: float = 0
-    ContractType: str = ''
+    ContractType: str = ""
+
 
 @dataclass
-class MarketOrder():
+class MarketOrder:
     Price: float = 0
     Amount: float = 0
 
+
 @dataclass
-class Depth():
+class Depth:
     Asks: []
     Bids: []
     Time: int
 
+
 @dataclass
-class Account():
+class Account:
     Info: dict
     Balance: float = 0
     FrozenBalance: float = 0
@@ -426,7 +440,7 @@ class Account():
 
 
 @dataclass
-class Position():
+class Position:
     Info: dict
     Type: int
     MarginLevel: int
@@ -435,7 +449,7 @@ class Position():
     FrozenAmount: float = 0
     Price: float = 0
     Profit: float = 0
-    ContractType: str='quarter'
+    ContractType: str = "quarter"
 
 
 from dataclasses import dataclass
@@ -446,16 +460,19 @@ class Order_STATE(Enum):
     """
     Direction of order/trade/position.
     """
+
     ORDER_STATE_PENDING = 0
     ORDER_STATE_CLOSED = 1
     ORDER_STATE_CANCELED = 2
     ORDER_STATE_UNKNOWN = 3
     ORDER_STATE_PARTIALLY_FILLED = 4
 
+
 class Order_Direction(Enum):
     """
     Direction of order/trade/position.
     """
+
     ORDER_TYPE_BUY = 0
     ORDER_TYPE_SELL = 1
 
@@ -464,5 +481,6 @@ class Order_Offset(Enum):
     """
     Direction of order/trade/position.
     """
+
     ORDER_OFFSET_OPEN = 0
     ORDER_OFFSET_CLOSE = 1

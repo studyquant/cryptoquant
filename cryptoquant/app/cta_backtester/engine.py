@@ -11,10 +11,14 @@ from cryptoquant.trader.engine import BaseEngine, MainEngine
 from cryptoquant.trader.constant import Interval
 from cryptoquant.trader.utility import extract_vt_symbol
 from cryptoquant.trader.object import HistoryRequest
+
 # from cryptoquant.trader.rqdata import rqdata_client
 from cryptoquant.trader.database import database_manager
 from cryptoquant.app.cta_strategy import CtaTemplate
-from cryptoquant.app.cta_strategy.studyquant_backtesting import BacktestingEngine, OptimizationSetting
+from cryptoquant.app.cta_strategy.studyquant_backtesting import (
+    BacktestingEngine,
+    OptimizationSetting,
+)
 
 APP_NAME = "CtaBacktester"
 
@@ -77,7 +81,8 @@ class BacktesterEngine(BaseEngine):
         app_path = Path(__file__).parent.parent
         path1 = app_path.joinpath("cta_strategy", "strategies")
         self.load_strategy_class_from_folder(
-            path1, "cryptoquant.app.cta_strategy.strategies")
+            path1, "cryptoquant.app.cta_strategy.strategies"
+        )
 
         path2 = Path.cwd().joinpath("strategies")
         self.load_strategy_class_from_folder(path2, "strategies")
@@ -91,12 +96,14 @@ class BacktesterEngine(BaseEngine):
                 # Load python source code file
                 if filename.endswith(".py"):
                     strategy_module_name = ".".join(
-                        [module_name, filename.replace(".py", "")])
+                        [module_name, filename.replace(".py", "")]
+                    )
                     self.load_strategy_class_from_module(strategy_module_name)
                 # Load compiled pyd binary file
                 elif filename.endswith(".pyd"):
                     strategy_module_name = ".".join(
-                        [module_name, filename.split(".")[0]])
+                        [module_name, filename.split(".")[0]]
+                    )
                     self.load_strategy_class_from_module(strategy_module_name)
 
     def load_strategy_class_from_module(self, module_name: str):
@@ -109,7 +116,11 @@ class BacktesterEngine(BaseEngine):
 
             for name in dir(module):
                 value = getattr(module, name)
-                if (isinstance(value, type) and issubclass(value, CtaTemplate) and value is not CtaTemplate):
+                if (
+                    isinstance(value, type)
+                    and issubclass(value, CtaTemplate)
+                    and value is not CtaTemplate
+                ):
                     self.classes[value.__name__] = value
         except:  # noqa
             msg = f"策略文件{module_name}加载失败，触发异常：\n{traceback.format_exc()}"
@@ -138,7 +149,7 @@ class BacktesterEngine(BaseEngine):
         pricetick: float,
         capital: int,
         inverse: bool,
-        setting: dict
+        setting: dict,
     ):
         """"""
         self.result_df = None
@@ -157,14 +168,11 @@ class BacktesterEngine(BaseEngine):
             size=size,
             pricetick=pricetick,
             capital=capital,
-            inverse=inverse
+            inverse=inverse,
         )
 
         strategy_class = self.classes[class_name]
-        engine.add_strategy(
-            strategy_class,
-            setting
-        )
+        engine.add_strategy(strategy_class, setting)
 
         engine.load_data()
 
@@ -200,7 +208,7 @@ class BacktesterEngine(BaseEngine):
         pricetick: float,
         capital: int,
         inverse: bool,
-        setting: dict
+        setting: dict,
     ):
         if self.thread:
             self.write_log("已有任务在运行中，请等待完成")
@@ -221,8 +229,8 @@ class BacktesterEngine(BaseEngine):
                 pricetick,
                 capital,
                 inverse,
-                setting
-            )
+                setting,
+            ),
         )
         self.thread.start()
 
@@ -259,7 +267,7 @@ class BacktesterEngine(BaseEngine):
         capital: int,
         inverse: bool,
         optimization_setting: OptimizationSetting,
-        use_ga: bool
+        use_ga: bool,
     ):
         """"""
         if use_ga:
@@ -282,24 +290,19 @@ class BacktesterEngine(BaseEngine):
             size=size,
             pricetick=pricetick,
             capital=capital,
-            inverse=inverse
+            inverse=inverse,
         )
 
         strategy_class = self.classes[class_name]
-        engine.add_strategy(
-            strategy_class,
-            {}
-        )
+        engine.add_strategy(strategy_class, {})
 
         if use_ga:
             self.result_values = engine.run_ga_optimization(
-                optimization_setting,
-                output=False
+                optimization_setting, output=False
             )
         else:
             self.result_values = engine.run_optimization(
-                optimization_setting,
-                output=False
+                optimization_setting, output=False
             )
 
         # Clear thread object handler.
@@ -324,7 +327,7 @@ class BacktesterEngine(BaseEngine):
         capital: int,
         inverse: bool,
         optimization_setting: OptimizationSetting,
-        use_ga: bool
+        use_ga: bool,
     ):
         if self.thread:
             self.write_log("已有任务在运行中，请等待完成")
@@ -346,19 +349,15 @@ class BacktesterEngine(BaseEngine):
                 capital,
                 inverse,
                 optimization_setting,
-                use_ga
-            )
+                use_ga,
+            ),
         )
         self.thread.start()
 
         return True
 
     def run_downloading(
-        self,
-        vt_symbol: str,
-        interval: str,
-        start: datetime,
-        end: datetime
+        self, vt_symbol: str, interval: str, start: datetime, end: datetime
     ):
         """
         Query bar data from RQData.
@@ -377,7 +376,7 @@ class BacktesterEngine(BaseEngine):
             exchange=exchange,
             interval=Interval(interval),
             start=start,
-            end=end
+            end=end,
         )
 
         contract = self.main_engine.get_contract(vt_symbol)
@@ -385,9 +384,7 @@ class BacktesterEngine(BaseEngine):
         try:
             # If history data provided in gateway, then query
             if contract and contract.history_data:
-                data = self.main_engine.query_history(
-                    req, contract.gateway_name
-                )
+                data = self.main_engine.query_history(req, contract.gateway_name)
             # Otherwise use RQData to query data
             else:
                 data = rqdata_client.query_history(req)
@@ -405,11 +402,7 @@ class BacktesterEngine(BaseEngine):
         self.thread = None
 
     def start_downloading(
-        self,
-        vt_symbol: str,
-        interval: str,
-        start: datetime,
-        end: datetime
+        self, vt_symbol: str, interval: str, start: datetime, end: datetime
     ):
         if self.thread:
             self.write_log("已有任务在运行中，请等待完成")
@@ -417,13 +410,7 @@ class BacktesterEngine(BaseEngine):
 
         self.write_log("-" * 40)
         self.thread = Thread(
-            target=self.run_downloading,
-            args=(
-                vt_symbol,
-                interval,
-                start,
-                end
-            )
+            target=self.run_downloading, args=(vt_symbol, interval, start, end)
         )
         self.thread.start()
 

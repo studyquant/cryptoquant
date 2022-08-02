@@ -8,24 +8,27 @@ import okex.option_api as option
 import okex.system_api as system
 import json
 import datetime
-from setting import api_key,secret_key,passphrase
+from setting import api_key, secret_key, passphrase
+
+
 def get_timestamp():
     now = datetime.datetime.now()
     t = now.isoformat("T", "milliseconds")
     return t + "Z"
 
+
 time = get_timestamp()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # param use_server_time's value is False if is True will use server timestamp
-# account api test
-# 资金账户API
+    # account api test
+    # 资金账户API
     accountAPI = account.AccountAPI(api_key, secret_key, passphrase, False)
     # 资金账户信息 （6次/s）
     result = accountAPI.get_wallet()
     # 单一币种账户信息 （6次/s）
-    result = accountAPI.get_currency('')
+    result = accountAPI.get_currency("")
     # 资金划转  (1次/2s)
     # result = accountAPI.coin_transfer('', '', 1, 1, 5, sub_account='', instrument_id='', to_instrument_id='')
     # 提币 （6次/s）
@@ -51,8 +54,8 @@ if __name__ == '__main__':
     # 提币手续费 （6次/s）
     # result = accountAPI.get_coin_fee('')
 
-# spot api test
-# 币币API
+    # spot api test
+    # 币币API
     spotAPI = spot.SpotAPI(api_key, secret_key, passphrase, False)
     # 币币账户信息 （20次/2s）
     result = spotAPI.get_account_info()
@@ -106,8 +109,8 @@ if __name__ == '__main__':
     # 公共-获取K线数据 （20次/2s）
     # result = spotAPI.get_kline('', '')
 
-# level api test
-# 币币杠杆API
+    # level api test
+    # 币币杠杆API
     levelAPI = lever.LeverAPI(api_key, secret_key, passphrase, False)
     # 币币杠杆账户信息 （20次/2s）
     result = levelAPI.get_account_info()
@@ -163,8 +166,8 @@ if __name__ == '__main__':
     # 公共-获取标记价格 （20次/2s）
     # result = levelAPI.get_mark_price('')
 
-# future api test
-# 交割合约API
+    # future api test
+    # 交割合约API
     futureAPI = future.FutureAPI(api_key, secret_key, passphrase, False)
     # 所有合约持仓信息 （5次/2s）
     result = futureAPI.get_position()
@@ -213,7 +216,7 @@ if __name__ == '__main__':
     # 委托策略下单 （40次/2s）
     # result = futureAPI.take_order_algo('', '', '', '', trigger_price='', algo_price='', algo_type='')
     # 委托策略撤单 （20次/2s）
-    result = futureAPI.cancel_algos('BTC-USDT-200626', ['239946'], '1')
+    result = futureAPI.cancel_algos("BTC-USDT-200626", ["239946"], "1")
     # 获取委托单列表 （20次/2s）
     # result = futureAPI.get_order_algos('', '', status='')
     # 获取当前手续费费率 （1次/10s）
@@ -221,7 +224,7 @@ if __name__ == '__main__':
     # 增加/减少保证金 （5次/2s）
     # result = futureAPI.change_margin('', '', '', '')
     # 设置逐仓自动增加保证金（5次/2s）
-    #result = futureAPI.set_auto_margin('', '')
+    # result = futureAPI.set_auto_margin('', '')
     # 公共-获取合约信息 （20次/2s）
     # result = futureAPI.get_products()
     # 公共-获取深度数据 （20次/2s）
@@ -251,8 +254,8 @@ if __name__ == '__main__':
     # 公共-获取历史结算/交割记录 （1次/60s）
     # result = futureAPI.get_history_settlement('')
 
-# swap api test
-# 永续合约API
+    # swap api test
+    # 永续合约API
     swapAPI = swap.SwapAPI(api_key, secret_key, passphrase, False)
     # 所有合约持仓信息 （1次/10s）
     # result = swapAPI.get_position()
@@ -328,8 +331,8 @@ if __name__ == '__main__':
     # 公共-获取合约历史资金费率 （20次/2s）
     # result = swapAPI.get_historical_funding_rate('')
 
-# option api test
-# 期权合约API
+    # option api test
+    # 期权合约API
     optionAPI = option.OptionAPI(api_key, secret_key, passphrase, False)
     # 单个标的指数持仓信息 （20次/2s）
     # result = optionAPI.get_specific_position('')
@@ -380,17 +383,16 @@ if __name__ == '__main__':
     # 公共-获取K线数据 （20次/2s）
     # result = optionAPI.get_kline('')
 
-# index api test
-# 指数API
+    # index api test
+    # 指数API
     indexAPI = index.IndexAPI(api_key, secret_key, passphrase, False)
     # 公共-获取指数成分 （20次/2s）
     # result = indexAPI.get_index_constituents('')
 
-# system api test
-# 获取系统升级状态
+    # system api test
+    # 获取系统升级状态
     system = system.SystemAPI(api_key, secret_key, passphrase, False)
     # 公共-获取系统升级状态（1次/5s）
     # result = system.get_system_status('')
-
 
     print(time + json.dumps(result))

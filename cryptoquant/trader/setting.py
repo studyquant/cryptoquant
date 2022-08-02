@@ -9,22 +9,18 @@ from .utility import load_json
 SETTINGS = {
     "font.family": "Arial",
     "font.size": 12,
-
     "log.active": True,
     "log.level": CRITICAL,
     "log.console": True,
     "log.file": True,
-
     "email.server": "smtp.qq.com",
     "email.port": 465,
     "email.username": "",
     "email.password": "",
     "email.sender": "",
     "email.receiver": "",
-
     "rqdata.username": "",
     "rqdata.password": "",
-
     "database.driver": "sqlite",  # see database.Driver
     "database.database": "database.db",  # for sqlite, use this as filepath
     "database.host": "localhost",

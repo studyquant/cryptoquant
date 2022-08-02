@@ -1,3 +1,3 @@
-api_key = ''
-seceret_key = ''
-passphrase = ''
+api_key = ""
+seceret_key = ""
+passphrase = ""

@@ -261,7 +261,6 @@ class DbTickData(Document):
 
 
 class MongoManager(BaseDatabaseManager):
-
     def load_bar_data(
         self,
         symbol: str,

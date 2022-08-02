@@ -19,7 +19,7 @@ from ..engine import (
     EVENT_BACKTESTER_LOG,
     EVENT_BACKTESTER_BACKTESTING_FINISHED,
     EVENT_BACKTESTER_OPTIMIZATION_FINISHED,
-    OptimizationSetting
+    OptimizationSetting,
 )
 
 
@@ -78,15 +78,9 @@ class BacktesterManager(QtWidgets.QWidget):
         start_dt = end_dt - timedelta(days=3 * 365)
 
         self.start_date_edit = QtWidgets.QDateEdit(
-            QtCore.QDate(
-                start_dt.year,
-                start_dt.month,
-                start_dt.day
-            )
+            QtCore.QDate(start_dt.year, start_dt.month, start_dt.day)
         )
-        self.end_date_edit = QtWidgets.QDateEdit(
-            QtCore.QDate.currentDate()
-        )
+        self.end_date_edit = QtWidgets.QDateEdit(QtCore.QDate.currentDate())
 
         self.rate_line = QtWidgets.QLineEdit("0.000025")
         self.slippage_line = QtWidgets.QLineEdit("0.2")
@@ -142,7 +136,7 @@ class BacktesterManager(QtWidgets.QWidget):
             self.daily_button,
             self.candle_button,
             edit_button,
-            reload_button
+            reload_button,
         ]:
             button.setFixedHeight(button.sizeHint().height() * 2)
 
@@ -188,22 +182,13 @@ class BacktesterManager(QtWidgets.QWidget):
         self.chart.setMinimumWidth(1000)
 
         self.trade_dialog = BacktestingResultDialog(
-            self.main_engine,
-            self.event_engine,
-            "回测成交记录",
-            BacktestingTradeMonitor
+            self.main_engine, self.event_engine, "回测成交记录", BacktestingTradeMonitor
         )
         self.order_dialog = BacktestingResultDialog(
-            self.main_engine,
-            self.event_engine,
-            "回测委托记录",
-            BacktestingOrderMonitor
+            self.main_engine, self.event_engine, "回测委托记录", BacktestingOrderMonitor
         )
         self.daily_dialog = BacktestingResultDialog(
-            self.main_engine,
-            self.event_engine,
-            "回测每日盈亏",
-            DailyResultMonitor
+            self.main_engine, self.event_engine, "回测每日盈亏", DailyResultMonitor
         )
 
         # Candle Chart
@@ -254,15 +239,20 @@ class BacktesterManager(QtWidgets.QWidget):
         """"""
         self.signal_log.connect(self.process_log_event)
         self.signal_backtesting_finished.connect(
-            self.process_backtesting_finished_event)
+            self.process_backtesting_finished_event
+        )
         self.signal_optimization_finished.connect(
-            self.process_optimization_finished_event)
+            self.process_optimization_finished_event
+        )
 
         self.event_engine.register(EVENT_BACKTESTER_LOG, self.signal_log.emit)
         self.event_engine.register(
-            EVENT_BACKTESTER_BACKTESTING_FINISHED, self.signal_backtesting_finished.emit)
+            EVENT_BACKTESTER_BACKTESTING_FINISHED, self.signal_backtesting_finished.emit
+        )
         self.event_engine.register(
-            EVENT_BACKTESTER_OPTIMIZATION_FINISHED, self.signal_optimization_finished.emit)
+            EVENT_BACKTESTER_OPTIMIZATION_FINISHED,
+            self.signal_optimization_finished.emit,
+        )
 
     def process_log_event(self, event: Event):
         """"""
@@ -347,7 +337,7 @@ class BacktesterManager(QtWidgets.QWidget):
             pricetick,
             capital,
             inverse,
-            new_setting
+            new_setting,
         )
 
         if result:
@@ -404,7 +394,7 @@ class BacktesterManager(QtWidgets.QWidget):
             capital,
             inverse,
             optimization_setting,
-            use_ga
+            use_ga,
         )
 
         self.result_button.setEnabled(False)
@@ -420,7 +410,7 @@ class BacktesterManager(QtWidgets.QWidget):
             start_date.year(),
             start_date.month(),
             start_date.day(),
-            tzinfo=get_localzone()
+            tzinfo=get_localzone(),
         )
 
         end = datetime(
@@ -430,24 +420,16 @@ class BacktesterManager(QtWidgets.QWidget):
             23,
             59,
             59,
-            tzinfo=get_localzone()
+            tzinfo=get_localzone(),
         )
 
-        self.backtester_engine.start_downloading(
-            vt_symbol,
-            interval,
-            start,
-            end
-        )
+        self.backtester_engine.start_downloading(vt_symbol, interval, start, end)
 
     def show_optimization_result(self):
         """"""
         result_values = self.backtester_engine.get_result_values()
 
-        dialog = OptimizationResultMonitor(
-            result_values,
-            self.target_display
-        )
+        dialog = OptimizationResultMonitor(result_values, self.target_display)
         dialog.exec_()
 
     def show_backtesting_trades(self):
@@ -507,38 +489,33 @@ class BacktesterManager(QtWidgets.QWidget):
 
 class StatisticsMonitor(QtWidgets.QTableWidget):
     """"""
+
     KEY_NAME_MAP = {
         "start_date": "首个交易日",
         "end_date": "最后交易日",
-
         "total_days": "总交易日",
         "profit_days": "盈利交易日",
         "loss_days": "亏损交易日",
-
         "capital": "起始资金",
         "end_balance": "结束资金",
-
         "total_return": "总收益率",
         "annual_return": "年化收益",
         "max_drawdown": "最大回撤",
         "max_ddpercent": "百分比最大回撤",
-
         "total_net_pnl": "总盈亏",
         "total_commission": "总手续费",
         "total_slippage": "总滑点",
         "total_turnover": "总成交额",
         "total_trade_count": "总成交笔数",
-
         "daily_net_pnl": "日均盈亏",
         "daily_commission": "日均手续费",
         "daily_slippage": "日均滑点",
         "daily_turnover": "日均成交额",
         "daily_trade_count": "日均成交笔数",
-
         "daily_return": "日均收益率",
         "return_std": "收益标准差",
         "sharpe_ratio": "夏普比率",
-        "return_drawdown_ratio": "收益回撤比"
+        "return_drawdown_ratio": "收益回撤比",
     }
 
     def __init__(self):
@@ -556,9 +533,7 @@ class StatisticsMonitor(QtWidgets.QTableWidget):
 
         self.setColumnCount(1)
         self.horizontalHeader().setVisible(False)
-        self.horizontalHeader().setSectionResizeMode(
-            QtWidgets.QHeaderView.Stretch
-        )
+        self.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.setEditTriggers(self.NoEditTriggers)
 
         for row, key in enumerate(self.KEY_NAME_MAP.keys()):
@@ -602,9 +577,7 @@ class BacktestingSettingEditor(QtWidgets.QDialog):
     For creating new strategy and editing strategy parameters.
     """
 
-    def __init__(
-        self, class_name: str, parameters: dict
-    ):
+    def __init__(self, class_name: str, parameters: dict):
         """"""
         super(BacktestingSettingEditor, self).__init__()
 
@@ -692,36 +665,34 @@ class BacktesterChart(pg.GraphicsWindow):
         # Create plot widgets
         self.balance_plot = self.addPlot(
             title="账户净值",
-            axisItems={"bottom": DateAxis(self.dates, orientation="bottom")}
+            axisItems={"bottom": DateAxis(self.dates, orientation="bottom")},
         )
         self.nextRow()
 
         self.drawdown_plot = self.addPlot(
             title="净值回撤",
-            axisItems={"bottom": DateAxis(self.dates, orientation="bottom")}
+            axisItems={"bottom": DateAxis(self.dates, orientation="bottom")},
         )
         self.nextRow()
 
         self.pnl_plot = self.addPlot(
             title="每日盈亏",
-            axisItems={"bottom": DateAxis(self.dates, orientation="bottom")}
+            axisItems={"bottom": DateAxis(self.dates, orientation="bottom")},
         )
         self.nextRow()
 
         self.distribution_plot = self.addPlot(title="盈亏分布")
 
         # Add curves and bars on plot widgets
-        self.balance_curve = self.balance_plot.plot(
-            pen=pg.mkPen("#ffc107", width=3)
-        )
+        self.balance_curve = self.balance_plot.plot(pen=pg.mkPen("#ffc107", width=3))
 
         dd_color = "#303f9f"
         self.drawdown_curve = self.drawdown_plot.plot(
             fillLevel=-0.3, brush=dd_color, pen=dd_color
         )
 
-        profit_color = 'r'
-        loss_color = 'g'
+        profit_color = "r"
+        loss_color = "g"
         self.profit_pnl_bar = pg.BarGraphItem(
             x=[], height=[], width=0.3, brush=profit_color, pen=profit_color
         )
@@ -803,16 +774,15 @@ class OptimizationSettingEditor(QtWidgets.QDialog):
     """
     For setting up parameters for optimization.
     """
+
     DISPLAY_NAME_MAP = {
         "总收益率": "total_return",
         "夏普比率": "sharpe_ratio",
         "收益回撤比": "return_drawdown_ratio",
-        "日均盈亏": "daily_net_pnl"
+        "日均盈亏": "daily_net_pnl",
     }
 
-    def __init__(
-        self, class_name: str, parameters: dict
-    ):
+    def __init__(self, class_name: str, parameters: dict):
         """"""
         super().__init__()
 
@@ -867,7 +837,7 @@ class OptimizationSettingEditor(QtWidgets.QDialog):
                 "type": type_,
                 "start": start_edit,
                 "step": step_edit,
-                "end": end_edit
+                "end": end_edit,
             }
 
             row += 1
@@ -920,10 +890,7 @@ class OptimizationSettingEditor(QtWidgets.QDialog):
                 self.optimization_setting.add_parameter(name, start_value)
             else:
                 self.optimization_setting.add_parameter(
-                    name,
-                    start_value,
-                    end_value,
-                    step_value
+                    name, start_value, end_value, step_value
                 )
 
         self.accept()
@@ -938,9 +905,7 @@ class OptimizationResultMonitor(QtWidgets.QDialog):
     For viewing optimization result.
     """
 
-    def __init__(
-        self, result_values: list, target_display: str
-    ):
+    def __init__(self, result_values: list, target_display: str):
         """"""
         super().__init__()
 
@@ -966,9 +931,7 @@ class OptimizationResultMonitor(QtWidgets.QDialog):
         table.horizontalHeader().setSectionResizeMode(
             0, QtWidgets.QHeaderView.ResizeToContents
         )
-        table.horizontalHeader().setSectionResizeMode(
-            1, QtWidgets.QHeaderView.Stretch
-        )
+        table.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
 
         for n, tp in enumerate(self.result_values):
             setting, target_value, _ = tp
@@ -999,8 +962,7 @@ class OptimizationResultMonitor(QtWidgets.QDialog):
         """
         Save table data into a csv file
         """
-        path, _ = QtWidgets.QFileDialog.getSaveFileName(
-            self, "保存数据", "", "CSV(*.csv)")
+        path, _ = QtWidgets.QFileDialog.getSaveFileName(self, "保存数据", "", "CSV(*.csv)")
 
         if not path:
             return
@@ -1077,15 +1039,14 @@ class DailyResultMonitor(BaseMonitor):
 
 
 class BacktestingResultDialog(QtWidgets.QDialog):
-    """
-    """
+    """ """
 
     def __init__(
         self,
         main_engine: MainEngine,
         event_engine: EventEngine,
         title: str,
-        table_class: QtWidgets.QTableWidget
+        table_class: QtWidgets.QTableWidget,
     ):
         """"""
         super().__init__()
@@ -1130,8 +1091,7 @@ class BacktestingResultDialog(QtWidgets.QDialog):
 
 
 class CandleChartDialog(QtWidgets.QDialog):
-    """
-    """
+    """ """
 
     def __init__(self):
         """"""
@@ -1183,18 +1143,18 @@ class CandleChartDialog(QtWidgets.QDialog):
                 "pos": (ix, trade.price),
                 "data": 1,
                 "size": 14,
-                "pen": pg.mkPen((255, 255, 255))
+                "pen": pg.mkPen((255, 255, 255)),
             }
 
             if trade.direction == Direction.LONG:
-                scatter_symbol = "t1"   # Up arrow
+                scatter_symbol = "t1"  # Up arrow
             else:
-                scatter_symbol = "t"    # Down arrow
+                scatter_symbol = "t"  # Down arrow
 
             if trade.offset == Offset.OPEN:
-                scatter_brush = pg.mkBrush((255, 255, 0))   # Yellow
+                scatter_brush = pg.mkBrush((255, 255, 0))  # Yellow
             else:
-                scatter_brush = pg.mkBrush((0, 0, 255))     # Blue
+                scatter_brush = pg.mkBrush((0, 0, 255))  # Blue
 
             scatter["symbol"] = scatter_symbol
             scatter["brush"] = scatter_brush

@@ -11,3 +11,5 @@ lxml
 msgpack
 itchat
 dataclasses
+plotly
+deap

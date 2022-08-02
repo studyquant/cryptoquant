@@ -27,9 +27,8 @@ from .object import (
     OrderRequest,
     CancelRequest,
     SubscribeRequest,
-    HistoryRequest
+    HistoryRequest,
 )
-
 
 
 class BaseGateway(ABC):
@@ -178,7 +177,7 @@ class LocalOrderManager:
         # For generating local orderid
         self.order_prefix = order_prefix
         self.order_count = 0
-        self.orders = {}        # local_orderid:order
+        self.orders = {}  # local_orderid:order
 
         # Map between local and system orderid
         self.local_sys_orderid_map = {}
@@ -191,7 +190,7 @@ class LocalOrderManager:
         self.push_data_callback = None
 
         # Cancel request buf
-        self.cancel_request_buf = {}    # local_orderid:req
+        self.cancel_request_buf = {}  # local_orderid:req
 
         # Hook cancel order function
         self._cancel_order = gateway.cancel_order
@@ -272,8 +271,7 @@ class LocalOrderManager:
         self.gateway.on_order(order)
 
     def cancel_order(self, req: CancelRequest):
-        """
-        """
+        """ """
         sys_orderid = self.get_sys_orderid(req.orderid)
         if not sys_orderid:
             self.cancel_request_buf[req.orderid] = req
@@ -282,8 +280,7 @@ class LocalOrderManager:
         self._cancel_order(req)
 
     def check_cancel_request(self, local_orderid: str):
-        """
-        """
+        """ """
         if local_orderid not in self.cancel_request_buf:
             return
 

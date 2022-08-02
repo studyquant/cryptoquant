@@ -4,8 +4,9 @@ from copy import copy
 from typing import Any, Callable
 
 from cryptoquant.trader.constant import Interval, Direction, Offset
-from cryptoquant.trader.object import BarData, TickData, OrderData, TradeData,OrderType
+from cryptoquant.trader.object import BarData, TickData, OrderData, TradeData, OrderType
 from cryptoquant.trader.utility import virtual
+
 # from cryptoquant.app.cta_strategy.api_gateway import fmz_template
 from .base import StopOrder, EngineType
 
@@ -148,29 +149,90 @@ class CtaTemplate(ABC):
         """
         pass
 
-    def buy(self, price: float, volume: float, stop: bool = False, lock: bool = False, order_id = '', order_type=OrderType.LIMIT):
+    def buy(
+        self,
+        price: float,
+        volume: float,
+        stop: bool = False,
+        lock: bool = False,
+        order_id="",
+        order_type=OrderType.LIMIT,
+    ):
         """
         Send buy order to open a long position.
         """
-        return self.send_order(Direction.LONG, Offset.OPEN, price, volume, stop, lock, order_id,order_type)
+        return self.send_order(
+            Direction.LONG, Offset.OPEN, price, volume, stop, lock, order_id, order_type
+        )
 
-    def sell(self, price: float, volume: float, stop: bool = False, lock: bool = False, order_id = '', order_type=OrderType.LIMIT):
+    def sell(
+        self,
+        price: float,
+        volume: float,
+        stop: bool = False,
+        lock: bool = False,
+        order_id="",
+        order_type=OrderType.LIMIT,
+    ):
         """
         Send sell order to close a long position.
         """
-        return self.send_order(Direction.SHORT, Offset.CLOSE, price, volume, stop, lock, order_id,order_type)
+        return self.send_order(
+            Direction.SHORT,
+            Offset.CLOSE,
+            price,
+            volume,
+            stop,
+            lock,
+            order_id,
+            order_type,
+        )
 
-    def short(self, price: float, volume: float, stop: bool = False, lock: bool = False, order_id = '', order_type=OrderType.LIMIT):
+    def short(
+        self,
+        price: float,
+        volume: float,
+        stop: bool = False,
+        lock: bool = False,
+        order_id="",
+        order_type=OrderType.LIMIT,
+    ):
         """
         Send short order to open as short position.
         """
-        return self.send_order(Direction.SHORT, Offset.OPEN, price, volume, stop, lock, order_id, order_type)
+        return self.send_order(
+            Direction.SHORT,
+            Offset.OPEN,
+            price,
+            volume,
+            stop,
+            lock,
+            order_id,
+            order_type,
+        )
 
-    def cover(self, price: float, volume: float, stop: bool = False, lock: bool = False, order_id = '', order_type=OrderType.LIMIT):
+    def cover(
+        self,
+        price: float,
+        volume: float,
+        stop: bool = False,
+        lock: bool = False,
+        order_id="",
+        order_type=OrderType.LIMIT,
+    ):
         """
         Send cover order to close a short position.
         """
-        return self.send_order(Direction.LONG, Offset.CLOSE, price, volume, stop, lock, order_id, order_type)
+        return self.send_order(
+            Direction.LONG,
+            Offset.CLOSE,
+            price,
+            volume,
+            stop,
+            lock,
+            order_id,
+            order_type,
+        )
 
     def send_order(
         self,
@@ -180,7 +242,7 @@ class CtaTemplate(ABC):
         volume: float,
         stop: bool = False,
         lock: bool = False,
-        order_id: str = '',
+        order_id: str = "",
         order_type=OrderType.LIMIT,
     ):
         """
@@ -188,9 +250,9 @@ class CtaTemplate(ABC):
         """
         if self.trading:
             vt_orderids = self.cta_engine.send_order(
-                self, direction, offset, price, volume, stop, lock,order_id,order_type
+                self, direction, offset, price, volume, stop, lock, order_id, order_type
             )
-            return vt_orderids # 返回订单
+            return vt_orderids  # 返回订单
         else:
             # print('策略交易未开启')
             return []
@@ -232,7 +294,7 @@ class CtaTemplate(ABC):
         days: int,
         interval: Interval = Interval.MINUTE,
         callback: Callable = None,
-        use_database: bool = False
+        use_database: bool = False,
     ):
         """
         Load historical bar data for initializing strategy.
@@ -240,13 +302,7 @@ class CtaTemplate(ABC):
         if not callback:
             callback = self.on_bar
 
-        self.cta_engine.load_bar(
-            self.vt_symbol,
-            days,
-            interval,
-            callback,
-            use_database
-        )
+        self.cta_engine.load_bar(self.vt_symbol, days, interval, callback, use_database)
 
     def load_tick(self, days: int):
         """
@@ -308,6 +364,7 @@ class CtaSignal(ABC):
 
 class TargetPosTemplate(CtaTemplate):
     """"""
+
     tick_add = 1
 
     last_tick = None

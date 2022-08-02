@@ -7,9 +7,9 @@ from cryptoquant.trader.object import (
     OrderData,
     TradeData,
     PositionData,
-    OrderRequest
+    OrderRequest,
 )
-from cryptoquant.trader.constant import (Direction, Offset, Exchange)
+from cryptoquant.trader.constant import Direction, Offset, Exchange
 
 
 class OffsetConverter:
@@ -208,8 +208,7 @@ class PositionHolding:
                     self.short_td_frozen += frozen
 
                     if self.short_td_frozen > self.short_td:
-                        self.short_yd_frozen += (self.short_td_frozen
-                                                 - self.short_td)
+                        self.short_yd_frozen += self.short_td_frozen - self.short_td
                         self.short_td_frozen = self.short_td
             elif order.direction == Direction.SHORT:
                 if order.offset == Offset.CLOSETODAY:
@@ -220,8 +219,7 @@ class PositionHolding:
                     self.long_td_frozen += frozen
 
                     if self.long_td_frozen > self.long_td:
-                        self.long_yd_frozen += (self.long_td_frozen
-                                                - self.long_td)
+                        self.long_yd_frozen += self.long_td_frozen - self.long_td
                         self.long_td_frozen = self.long_td
 
             self.long_pos_frozen = self.long_td_frozen + self.long_yd_frozen

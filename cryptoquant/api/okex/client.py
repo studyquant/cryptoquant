@@ -5,8 +5,9 @@ import logging
 
 
 class Client(object):
-
-    def __init__(self, api_key, api_secret_key, passphrase, use_server_time=False, first=False):
+    def __init__(
+        self, api_key, api_secret_key, passphrase, use_server_time=False, first=False
+    ):
         self.API_KEY = api_key
         self.API_SECRET_KEY = api_secret_key
         self.PASSPHRASE = passphrase
@@ -30,7 +31,10 @@ class Client(object):
         # print(timestamp)
 
         body = json.dumps(params) if method == c.POST else ""
-        sign = utils.sign(utils.pre_hash(timestamp, method, request_path, str(body)), self.API_SECRET_KEY)
+        sign = utils.sign(
+            utils.pre_hash(timestamp, method, request_path, str(body)),
+            self.API_SECRET_KEY,
+        )
         # print(utils.pre_hash(timestamp, method, request_path, str(body)))
         header = utils.get_header(self.API_KEY, sign, timestamp, self.PASSPHRASE)
         # print(timestamp)
@@ -53,28 +57,30 @@ class Client(object):
             response = requests.get(url, headers=header)
         elif method == c.POST:
             response = requests.post(url, data=body, headers=header)
-            #response = requests.post(url, json=body, headers=header)
+            # response = requests.post(url, json=body, headers=header)
         elif method == c.DELETE:
             response = requests.delete(url, headers=header)
 
         # exception handle
-        if not str(response.status_code).startswith('2'):
+        if not str(response.status_code).startswith("2"):
             raise exceptions.OkexAPIException(response)
         try:
             res_header = response.headers
             if cursor:
                 r = dict()
                 try:
-                    r['before'] = res_header['OK-BEFORE']
-                    r['after'] = res_header['OK-AFTER']
+                    r["before"] = res_header["OK-BEFORE"]
+                    r["after"] = res_header["OK-AFTER"]
                 except:
                     pass
-                return response.json()#, r
+                return response.json()  # , r
             else:
                 return response.json()
 
         except ValueError:
-            raise exceptions.OkexRequestException('Invalid Response: %s' % response.text)
+            raise exceptions.OkexRequestException(
+                "Invalid Response: %s" % response.text
+            )
 
     def _request_without_params(self, method, request_path):
         return self._request(method, request_path, {})
@@ -86,6 +92,6 @@ class Client(object):
         url = c.API_URL + c.SERVER_TIMESTAMP_URL
         response = requests.get(url)
         if response.status_code == 200:
-            return response.json()['iso']
+            return response.json()["iso"]
         else:
             return ""

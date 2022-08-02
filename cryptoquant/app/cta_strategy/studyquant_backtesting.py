@@ -14,8 +14,14 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from deap import creator, base, tools, algorithms
 
-from cryptoquant.trader.constant import (Direction, Offset, Exchange,
-                                  Interval, Status,OrderType)
+from cryptoquant.trader.constant import (
+    Direction,
+    Offset,
+    Exchange,
+    Interval,
+    Status,
+    OrderType,
+)
 from cryptoquant.trader.database import database_manager
 
 from cryptoquant.app.cta_strategy import (
@@ -38,7 +44,7 @@ from .base import (
     STOPORDER_PREFIX,
     StopOrder,
     StopOrderStatus,
-    INTERVAL_DELTA_MAP
+    INTERVAL_DELTA_MAP,
 )
 from .template import CtaTemplate
 
@@ -193,7 +199,7 @@ class BacktestingEngine:
         capital: int = 0,
         end: datetime = None,
         mode: BacktestingMode = BacktestingMode.BAR,
-        inverse: bool = False
+        inverse: bool = False,
     ):
         """"""
         self.mode = mode
@@ -231,7 +237,7 @@ class BacktestingEngine:
             self.output("起始日期必须小于结束日期")
             return
 
-        self.history_data.clear()       # Clear previously loaded history data
+        self.history_data.clear()  # Clear previously loaded history data
 
         # Load 30 days of data each time and allow for progress update
         progress_delta = timedelta(days=30)
@@ -247,19 +253,10 @@ class BacktestingEngine:
 
             if self.mode == BacktestingMode.BAR:
                 data = load_bar_data(
-                    self.symbol,
-                    self.exchange,
-                    self.interval,
-                    start,
-                    end
+                    self.symbol, self.exchange, self.interval, start, end
                 )
             else:
-                data = load_tick_data(
-                    self.symbol,
-                    self.exchange,
-                    start,
-                    end
-                )
+                data = load_tick_data(self.symbol, self.exchange, start, end)
 
             self.history_data.extend(data)
 
@@ -269,7 +266,7 @@ class BacktestingEngine:
             self.output(f"加载进度：{progress_bar} [{progress:.0%}]")
 
             start = end + interval_delta
-            end += (progress_delta + interval_delta)
+            end += progress_delta + interval_delta
 
         self.output(f"历史数据加载完成，数据量：{len(self.history_data)}")
 
@@ -340,12 +337,7 @@ class BacktestingEngine:
 
         for daily_result in self.daily_results.values():
             daily_result.calculate_pnl(
-                pre_close,
-                start_pos,
-                self.size,
-                self.rate,
-                self.slippage,
-                self.inverse
+                pre_close, start_pos, self.size, self.rate, self.slippage, self.inverse
             )
 
             pre_close = daily_result.close_price
@@ -404,8 +396,7 @@ class BacktestingEngine:
             df["balance"] = df["net_pnl"].cumsum() + self.capital
             df["return"] = np.log(df["balance"] / df["balance"].shift(1)).fillna(0)
             df["highlevel"] = (
-                df["balance"].rolling(
-                    min_periods=1, window=len(df), center=False).max()
+                df["balance"].rolling(min_periods=1, window=len(df), center=False).max()
             )
             df["drawdown"] = df["balance"] - df["highlevel"]
             df["ddpercent"] = df["drawdown"] / df["highlevel"] * 100
@@ -544,22 +535,19 @@ class BacktestingEngine:
             rows=4,
             cols=1,
             subplot_titles=["Balance", "Drawdown", "Daily Pnl", "Pnl Distribution"],
-            vertical_spacing=0.06
+            vertical_spacing=0.06,
         )
 
         balance_line = go.Scatter(
-            x=df.index,
-            y=df["balance"],
-            mode="lines",
-            name="Balance"
+            x=df.index, y=df["balance"], mode="lines", name="Balance"
         )
         drawdown_scatter = go.Scatter(
             x=df.index,
             y=df["drawdown"],
             fillcolor="red",
-            fill='tozeroy',
+            fill="tozeroy",
             mode="lines",
-            name="Drawdown"
+            name="Drawdown",
         )
         pnl_bar = go.Bar(y=df["net_pnl"], name="Daily Pnl")
         pnl_histogram = go.Histogram(x=df["net_pnl"], nbinsx=100, name="Days")
@@ -593,22 +581,25 @@ class BacktestingEngine:
 
         results = []
         for setting in settings:
-            result = (pool.apply_async(optimize, (
-                target_name,
-                self.strategy_class,
-                setting,
-                self.vt_symbol,
-                self.interval,
-                self.start,
-                self.rate,
-                self.slippage,
-                self.size,
-                self.pricetick,
-                self.capital,
-                self.end,
-                self.mode,
-                self.inverse
-            )))
+            result = pool.apply_async(
+                optimize,
+                (
+                    target_name,
+                    self.strategy_class,
+                    setting,
+                    self.vt_symbol,
+                    self.interval,
+                    self.start,
+                    self.rate,
+                    self.slippage,
+                    self.size,
+                    self.pricetick,
+                    self.capital,
+                    self.end,
+                    self.mode,
+                    self.inverse,
+                ),
+            )
             results.append(result)
 
         pool.close()
@@ -625,7 +616,13 @@ class BacktestingEngine:
 
         return result_values
 
-    def run_ga_optimization(self, optimization_setting: OptimizationSetting, population_size=100, ngen_size=30, output=True):
+    def run_ga_optimization(
+        self,
+        optimization_setting: OptimizationSetting,
+        population_size=100,
+        ngen_size=30,
+        output=True,
+    ):
         """"""
         # Get optimization setting and target
         settings = optimization_setting.generate_setting_ga()
@@ -651,7 +648,7 @@ class BacktestingEngine:
             for i in range(size):
                 if random.random() < indpb:
                     individual[i] = paramlist[i]
-            return individual,
+            return (individual,)
 
         # Create ga object function
         global ga_target_name
@@ -686,7 +683,9 @@ class BacktestingEngine:
 
         # Set up genetic algorithem
         toolbox = base.Toolbox()
-        toolbox.register("individual", tools.initIterate, creator.Individual, generate_parameter)
+        toolbox.register(
+            "individual", tools.initIterate, creator.Individual, generate_parameter
+        )
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
         toolbox.register("mate", tools.cxTwoPoint)
         toolbox.register("mutate", mutate_individual, indpb=1)
@@ -694,16 +693,18 @@ class BacktestingEngine:
         toolbox.register("select", tools.selNSGA2)
 
         total_size = len(settings)
-        pop_size = population_size                      # number of individuals in each generation
-        lambda_ = pop_size                              # number of children to produce at each generation
-        mu = int(pop_size * 0.8)                        # number of individuals to select for the next generation
+        pop_size = population_size  # number of individuals in each generation
+        lambda_ = pop_size  # number of children to produce at each generation
+        mu = int(
+            pop_size * 0.8
+        )  # number of individuals to select for the next generation
 
-        cxpb = 0.95         # probability that an offspring is produced by crossover
-        mutpb = 1 - cxpb    # probability that an offspring is produced by mutation
-        ngen = ngen_size    # number of generation
+        cxpb = 0.95  # probability that an offspring is produced by crossover
+        mutpb = 1 - cxpb  # probability that an offspring is produced by mutation
+        ngen = ngen_size  # number of generation
 
         pop = toolbox.population(pop_size)
-        hof = tools.ParetoFront()               # end result of pareto front
+        hof = tools.ParetoFront()  # end result of pareto front
 
         stats = tools.Statistics(lambda ind: ind.fitness.values)
         np.set_printoptions(suppress=True)
@@ -727,15 +728,7 @@ class BacktestingEngine:
         start = time()
 
         algorithms.eaMuPlusLambda(
-            pop,
-            toolbox,
-            mu,
-            lambda_,
-            cxpb,
-            mutpb,
-            ngen,
-            stats,
-            halloffame=hof
+            pop, toolbox, mu, lambda_, cxpb, mutpb, ngen, stats, halloffame=hof
         )
 
         end = time()
@@ -850,7 +843,6 @@ class BacktestingEngine:
                 volume=order.volume,
                 datetime=self.datetime,
                 gateway_name=self.gateway_name,
-
             )
 
             self.strategy.pos += pos_change
@@ -902,7 +894,7 @@ class BacktestingEngine:
                 traded=stop_order.volume,
                 status=Status.ALLTRADED,
                 gateway_name=self.gateway_name,
-                datetime=self.datetime
+                datetime=self.datetime,
             )
 
             self.limit_orders[order.vt_orderid] = order
@@ -952,7 +944,7 @@ class BacktestingEngine:
         days: int,
         interval: Interval,
         callback: Callable,
-        use_database: bool
+        use_database: bool,
     ):
         """"""
         self.days = days
@@ -992,19 +984,20 @@ class BacktestingEngine:
         volume: float,
         stop: bool,
         lock: bool,
-        order_id: str = '',
-        order_type=OrderType.LIMIT
+        order_id: str = "",
+        order_type=OrderType.LIMIT,
     ):
         """"""
         price = round_to(price, self.pricetick)
         if stop:
             vt_orderid = self.send_stop_order(direction, offset, price, volume)
-        elif order_id != '':
-            vt_orderid = self.send_limit_order2(direction, offset, price, volume, order_id)
+        elif order_id != "":
+            vt_orderid = self.send_limit_order2(
+                direction, offset, price, volume, order_id
+            )
         else:
             vt_orderid = self.send_limit_order(direction, offset, price, volume)
         return [vt_orderid]
-
 
     def send_order_with_id(
         self,
@@ -1015,18 +1008,19 @@ class BacktestingEngine:
         volume: float,
         stop: bool,
         lock: bool,
-        order_id: str = ''
+        order_id: str = "",
     ):
         """"""
         price = round_to(price, self.pricetick)
         if stop:
             vt_orderid = self.send_stop_order(direction, offset, price, volume)
-        elif order_id != '':
-            vt_orderid = self.send_limit_order2(direction, offset, price, volume, order_id)
+        elif order_id != "":
+            vt_orderid = self.send_limit_order2(
+                direction, offset, price, volume, order_id
+            )
         else:
             vt_orderid = self.send_limit_order(direction, offset, price, volume)
         return vt_orderid
-
 
     def send_limit_order2(
         self,
@@ -1034,7 +1028,7 @@ class BacktestingEngine:
         offset: Offset,
         price: float,
         volume: float,
-        custom_id:str = ''
+        custom_id: str = "",
     ):
         """"""
         self.limit_order_count += 1
@@ -1050,8 +1044,8 @@ class BacktestingEngine:
             status=Status.SUBMITTING,
             gateway_name=self.gateway_name,
             datetime=self.datetime,
-            custom_id=custom_id
-            )
+            custom_id=custom_id,
+        )
 
         self.active_limit_orders[order.vt_orderid] = order
         self.limit_orders[order.vt_orderid] = order
@@ -1059,11 +1053,7 @@ class BacktestingEngine:
         return order
 
     def send_stop_order(
-        self,
-        direction: Direction,
-        offset: Offset,
-        price: float,
-        volume: float
+        self, direction: Direction, offset: Offset, price: float, volume: float
     ):
         """"""
         self.stop_order_count += 1
@@ -1084,11 +1074,7 @@ class BacktestingEngine:
         return stop_order.stop_orderid
 
     def send_limit_order(
-        self,
-        direction: Direction,
-        offset: Offset,
-        price: float,
-        volume: float
+        self, direction: Direction, offset: Offset, price: float, volume: float
     ):
         """"""
         self.limit_order_count += 1
@@ -1103,7 +1089,7 @@ class BacktestingEngine:
             volume=volume,
             status=Status.SUBMITTING,
             gateway_name=self.gateway_name,
-            datetime=self.datetime
+            datetime=self.datetime,
         )
 
         self.active_limit_orders[order.vt_orderid] = order
@@ -1247,7 +1233,7 @@ class DailyResult:
         size: int,
         rate: float,
         slippage: float,
-        inverse: bool
+        inverse: bool,
     ):
         """"""
         # If no pre_close provided on the first day,
@@ -1261,12 +1247,14 @@ class DailyResult:
         self.start_pos = start_pos
         self.end_pos = start_pos
 
-        if not inverse:     # For normal contract
-            self.holding_pnl = self.start_pos * \
-                (self.close_price - self.pre_close) * size
-        else:               # For crypto currency inverse contract
-            self.holding_pnl = self.start_pos * \
-                (1 / self.pre_close - 1 / self.close_price) * size
+        if not inverse:  # For normal contract
+            self.holding_pnl = (
+                self.start_pos * (self.close_price - self.pre_close) * size
+            )
+        else:  # For crypto currency inverse contract
+            self.holding_pnl = (
+                self.start_pos * (1 / self.pre_close - 1 / self.close_price) * size
+            )
 
         # Trading pnl is the pnl from new trade during the day
         self.trade_count = len(self.trades)
@@ -1282,15 +1270,15 @@ class DailyResult:
             # For normal contract
             if not inverse:
                 turnover = trade.volume * size * trade.price
-                self.trading_pnl += pos_change * \
-                    (self.close_price - trade.price) * size
+                self.trading_pnl += pos_change * (self.close_price - trade.price) * size
                 self.slippage += trade.volume * size * slippage
             # For crypto currency inverse contract
             else:
                 turnover = trade.volume * size / trade.price
-                self.trading_pnl += pos_change * \
-                    (1 / trade.price - 1 / self.close_price) * size
-                self.slippage += trade.volume * size * slippage / (trade.price ** 2)
+                self.trading_pnl += (
+                    pos_change * (1 / trade.price - 1 / self.close_price) * size
+                )
+                self.slippage += trade.volume * size * slippage / (trade.price**2)
 
             self.turnover += turnover
             self.commission += turnover * rate
@@ -1314,7 +1302,7 @@ def optimize(
     capital: int,
     end: datetime,
     mode: BacktestingMode,
-    inverse: bool
+    inverse: bool,
 ):
     """
     Function for running in multiprocessing.pool
@@ -1332,7 +1320,7 @@ def optimize(
         capital=capital,
         end=end,
         mode=mode,
-        inverse=inverse
+        inverse=inverse,
     )
 
     engine.add_strategy(strategy_class, setting)
@@ -1364,7 +1352,7 @@ def _ga_optimize(parameter_values: tuple):
         ga_capital,
         ga_end,
         ga_mode,
-        ga_inverse
+        ga_inverse,
     )
     return (result[1],)
 
@@ -1376,29 +1364,16 @@ def ga_optimize(parameter_values: list):
 
 @lru_cache(maxsize=999)
 def load_bar_data(
-    symbol: str,
-    exchange: Exchange,
-    interval: Interval,
-    start: datetime,
-    end: datetime
+    symbol: str, exchange: Exchange, interval: Interval, start: datetime, end: datetime
 ):
     """"""
-    return database_manager.load_bar_data(
-        symbol, exchange, interval, start, end
-    )
+    return database_manager.load_bar_data(symbol, exchange, interval, start, end)
 
 
 @lru_cache(maxsize=999)
-def load_tick_data(
-    symbol: str,
-    exchange: Exchange,
-    start: datetime,
-    end: datetime
-):
+def load_tick_data(symbol: str, exchange: Exchange, start: datetime, end: datetime):
     """"""
-    return database_manager.load_tick_data(
-        symbol, exchange, start, end
-    )
+    return database_manager.load_tick_data(symbol, exchange, start, end)
 
 
 # GA related global value

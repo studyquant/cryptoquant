@@ -17,7 +17,7 @@ from .object import BarData, TickData
 from .constant import Exchange, Interval
 
 
-log_formatter = logging.Formatter('[%(asctime)s] %(message)s')
+log_formatter = logging.Formatter("[%(asctime)s] %(message)s")
 
 
 def extract_vt_symbol(vt_symbol: str):
@@ -109,12 +109,7 @@ def save_json(filename: str, data: dict):
     """
     filepath = get_file_path(filename)
     with open(filepath, mode="w+", encoding="UTF-8") as f:
-        json.dump(
-            data,
-            f,
-            indent=4,
-            ensure_ascii=False
-        )
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
 
 def round_to(value: float, target: float) -> float:
@@ -163,7 +158,7 @@ class BarGenerator:
         on_bar: Callable,
         window: int = 0,
         on_window_bar: Callable = None,
-        interval: Interval = Interval.MINUTE
+        interval: Interval = Interval.MINUTE,
     ):
         """Constructor"""
         self.bar = None
@@ -192,9 +187,7 @@ class BarGenerator:
         if not self.bar:
             new_minute = True
         elif self.bar.datetime.minute != tick.datetime.minute:
-            self.bar.datetime = self.bar.datetime.replace(
-                second=0, microsecond=0
-            )
+            self.bar.datetime = self.bar.datetime.replace(second=0, microsecond=0)
             self.on_bar(self.bar)
 
             new_minute = True
@@ -210,7 +203,7 @@ class BarGenerator:
                 high_price=tick.last_price,
                 low_price=tick.last_price,
                 close_price=tick.last_price,
-                open_interest=tick.open_interest
+                open_interest=tick.open_interest,
             )
         else:
             self.bar.high_price = max(self.bar.high_price, tick.last_price)
@@ -232,7 +225,7 @@ class BarGenerator:
         # If not inited, creaate window bar object
         if not self.window_bar:
             # Generate timestamp for bar data
-            if self.interval == Interval.MINUTE:
+            if self.interval.value == Interval.MINUTE.value:
                 dt = bar.datetime.replace(second=0, microsecond=0)
             else:
                 dt = bar.datetime.replace(minute=0, second=0, microsecond=0)
@@ -244,14 +237,12 @@ class BarGenerator:
                 gateway_name=bar.gateway_name,
                 open_price=bar.open_price,
                 high_price=bar.high_price,
-                low_price=bar.low_price
+                low_price=bar.low_price,
             )
         # Otherwise, update high/low price into window bar
         else:
-            self.window_bar.high_price = max(
-                self.window_bar.high_price, bar.high_price)
-            self.window_bar.low_price = min(
-                self.window_bar.low_price, bar.low_price)
+            self.window_bar.high_price = max(self.window_bar.high_price, bar.high_price)
+            self.window_bar.low_price = min(self.window_bar.low_price, bar.low_price)
 
         # Update close price/volume into window bar
         self.window_bar.close_price = bar.close_price
@@ -261,11 +252,11 @@ class BarGenerator:
         # Check if window bar completed
         finished = False
 
-        if self.interval == Interval.MINUTE:
+        if self.interval.value == Interval.MINUTE.value:
             # x-minute bar
             if not (bar.datetime.minute + 1) % self.window:
                 finished = True
-        elif self.interval == Interval.HOUR:
+        elif self.interval.value == Interval.HOUR.value:
             if self.last_bar and bar.datetime.hour != self.last_bar.datetime.hour:
                 # 1-hour bar
                 if self.window == 1:
@@ -289,13 +280,13 @@ class BarGenerator:
         """
         Generate the bar data and call callback immediately.
         """
-        self.bar.datetime = self.bar.datetime.replace(
-            second=0, microsecond=0
-        )
+        self.bar.datetime = self.bar.datetime.replace(second=0, microsecond=0)
         self.on_bar(self.bar)
         self.bar = None
 
+
 import pandas as pd
+
 
 class ArrayManager(object):
     """
@@ -316,13 +307,13 @@ class ArrayManager(object):
         self.close_array = np.zeros(size)
         self.volume_array = np.zeros(size)
 
-    def update_kline(self, kline:pd.DataFrame) -> None:
+    def update_kline(self, kline: pd.DataFrame) -> None:
         """
         Args:
             data: kline dataframe, close, open, high, low
         Returns: None
         """
-        self.open_array = kline['open']
+        self.open_array = kline["open"]
 
     def get_dataframe(self) -> None:
         """
@@ -331,17 +322,14 @@ class ArrayManager(object):
         Returns: None
         """
         df = pd.DataFrame()
-        df['open'] = self.open_array
-        df['high'] = self.high_array
-        df['low'] = self.low_array
-        df['close'] = self.close_array
-        df['volume'] = self.volume_array
-        df['open'] = self.close_array
+        df["open"] = self.open_array
+        df["high"] = self.high_array
+        df["low"] = self.low_array
+        df["close"] = self.close_array
+        df["volume"] = self.volume_array
+        df["open"] = self.close_array
         # df = pd.DataFrame([self.open_array,self.high_array,self.low_array,self.close_array,self.volume_array ],columns=[['open','high','low','close','volume']])
         return df
-
-
-
 
     def update_bar(self, bar):
         """

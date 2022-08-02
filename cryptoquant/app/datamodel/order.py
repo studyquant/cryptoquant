@@ -1,32 +1,35 @@
 """
 =========================================================
-* Powered by StudyQuant 
+* Powered by StudyQuant
 * author: Rudy
-* wechat:studyquant88
+* wechat: studyquant88
 =========================================================
+* 更多量化示例代码可添加微信 studyquant88 领取 
+
 * Product Page: https://studyquant.com
-* Copyright 2021 StudyQuant
+* Copyright 2022 StudyQuant
 * License (https://studyquant.com/)
 * Coded by https://studyquant.com
-=========================================================
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+=========================================================* 
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 """
 from typing import Dict
 from dataclasses import dataclass
 
+
 @dataclass
-class Order():
+class Order:
     Info: Dict
     Id: int = 0
-    Status: int =0    # 订单状态，参考常量里的订单状态，例如：ORDER_STATE_CLOSED
-    Type: int = 0     # 订单类型，参考常量里的订单类型，例如：ORDER_TYPE_BUY
-    Offset: int = 0   # 开仓，还是平仓
+    Status: int = 0  # 订单状态，参考常量里的订单状态，例如：ORDER_STATE_CLOSED
+    Type: int = 0  # 订单类型，参考常量里的订单类型，例如：ORDER_TYPE_BUY
+    Offset: int = 0  # 开仓，还是平仓
     Price: float = 0
     Amount: float = 0
     DealAmount: float = 0
     AvgPrice: float = 0
-    ContractType: str = ''
-    #------ 用户习惯不同---------
+    ContractType: str = ""
+    # ------ 用户习惯不同---------
 
     def __post_init__(self):
         """"""
@@ -37,7 +40,7 @@ class Order():
         self.info = self.Info
         self.id = self.Id
         self.status = self.Status  # 订单状态，参考常量里的订单状态，例如：ORDER_STATE_CLOSED
-        self.type = self.Type     # 订单类型，参考常量里的订单类型，例如：ORDER_TYPE_BUY
+        self.type = self.Type  # 订单类型，参考常量里的订单类型，例如：ORDER_TYPE_BUY
         self.direction = self.Offset
         # Offset = Direction
         self.price = self.Price
@@ -57,4 +60,3 @@ class Order():
         # deal_amount = DealAmount
         # avg_price = AvgPrice
         # contract_type = ContractType
-

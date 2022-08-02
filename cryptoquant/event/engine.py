@@ -11,6 +11,7 @@ from typing import Any, Callable
 EVENT_TIMER = "eTimer"
 EVENT_CTA_STRATEGY = "eCtaStrategy"
 
+
 class Event:
     """
     Event object consists of a type string which is used
@@ -22,6 +23,7 @@ class Event:
         """"""
         self.type = type
         self.data = data
+
 
 # Defines handler function to be used in event engine.
 HandlerType = Callable[[Event], None]
@@ -48,7 +50,7 @@ class EventEngine:
         self._timer = Thread(target=self._run_timer)
         self._handlers = defaultdict(list)
         self._general_handlers = []
-        print('eventengine inited')
+        print("eventengine inited")
 
     def _run(self):
         """
@@ -80,7 +82,7 @@ class EventEngine:
                 # print('hander', handler)
                 # print(event.type, event.__dict__)
                 if event.type == EVENT_CTA_STRATEGY:
-                    print('hander',handler)
+                    print("hander", handler)
                     print(event.type, event.__dict__)
                 # if event.type == "eLog":
                 #     print('hander',handler)
@@ -166,7 +168,8 @@ class EventEngine:
         if handler in self._general_handlers:
             self._general_handlers.remove(handler)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     pass
 
     # 第一步 实例化类
@@ -178,15 +181,14 @@ if __name__ == '__main__':
             print(event.data)
 
     engine = EventEngine()
-    #2. 启动EventEngine.
+    # 2. 启动EventEngine.
     engine.start()
-    #3. 注册要监听处理的事件。
-    engine.register('tick', get_price)
+    # 3. 注册要监听处理的事件。
+    engine.register("tick", get_price)
 
     while True:
         # 循环生产事件.
-        price = random.randrange(0,800, 1)
-        event = Event(type='tick',data=price)
+        price = random.randrange(0, 800, 1)
+        event = Event(type="tick", data=price)
         engine.put(event)
         time.sleep(3)
-

@@ -3,23 +3,24 @@ web:  studyquant.com
 author: Rudy
 wechat:82789754
 """
-# import os
-# if(os.path.exists("config/privateconfig.py")):
-#     from cryptoquant.config.privateconfig import *
-#     g_api_key = p_api_key
-#     g_secret_key = p_secret_key
-# else:
-#     g_api_key = ''
-#     g_secret_key = ''
+import os
 
+current_path = os.path.dirname(os.path.abspath(__file__))
 
-binance_api_key = ''
-binance_secret_key = ''
-ok_api_key = ''
-ok_seceret_key = ''
-ok_passphrase = ''
+if "privateconfig.py" in os.listdir(current_path):
+    binance_api_key = ""
+    binance_secret_key = ""
+    from cryptoquant.config.privateconfig import *
 
+    g_api_key = binance_api_key
+    g_secret_key = binance_secret_key
+else:
+    g_api_key = ""
+    g_secret_key = ""
+    # please input your binance api key and secret_key
+    binance_api_key = ""
+    binance_secret_key = ""
 
-
-
-
+ok_api_key = ""
+ok_seceret_key = ""
+ok_passphrase = ""
