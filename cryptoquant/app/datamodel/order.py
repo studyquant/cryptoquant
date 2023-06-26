@@ -60,3 +60,24 @@ class Order:
         # deal_amount = DealAmount
         # avg_price = AvgPrice
         # contract_type = ContractType
+
+    # def __repr__(self):
+    #     """
+    #     self.log(
+    #         "{}: price:{} @ {} volume, order_id {}".format(
+    #             order.direction, order.Price, order.volume, order.orderid
+    #         )
+    #     )
+    #
+    #     """
+    #     msg = "{}: price:{} @ {} volume, order_id {}".format(self.Type, self.Price, self.Amount, self.Id)
+    #     return f"Order[{msg}]"
+
+
+    def __str__(self):
+        """
+
+        """
+
+        msg = "{}: price:{} @ {} volume, order_id {}".format(self.Type, self.Price, self.Amount, self.Id)
+        return f"{msg}"

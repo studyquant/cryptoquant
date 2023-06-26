@@ -127,13 +127,14 @@ class Exchange(Enum):
     HUOBI = "HUOBI"
     BITFINEX = "BITFINEX"
     BINANCE = "BINANCE"
+    BINANCESPOT = "BINANCESPOT"
     BYBIT = "BYBIT"  # bybit.com
     COINBASE = "COINBASE"
     DERIBIT = "DERIBIT"
     GATEIO = "GATEIO"
     BITSTAMP = "BITSTAMP"
     MXC = "MXC"
-
+    TIGER = "TIGER"
     # Special Function
     LOCAL = "LOCAL"  # For local generated data
 
@@ -161,6 +162,7 @@ class Interval(Enum):
     MIN1 = "1m"
     MIN3 = "3m"
     MIN5 = "5m"
+    MIN10 = "10m"
     MIN15 = "15m"
     MIN30 = "30m"
     HOUR1 = "1h"
@@ -177,9 +179,13 @@ class Interval(Enum):
 
 
 # _____
-
-
 class Runmode:
+    BACKTESTING = "backtesting"
+    LIVE = "live"
+    next_period = "次周期入场"
+    this_period = "K线中运行"
+
+class RunMode:
     BACKTESTING = "backtesting"
     LIVE = "live"
     next_period = "次周期入场"
@@ -189,8 +195,8 @@ class Runmode:
 class SymbolType:
     SPOT = "SPOT"
     FUTURES = "FUTURES"
-
-
+    US_STOCK = "US_STOCK"
+    US_FUTURES = "US_FUTURES"
 class OrderType(Enum):
     """
     Order type.
@@ -208,7 +214,7 @@ class OrderSTATUS(Enum):
     Direction of order/trade/position.
     """
 
-    ORDER_STATE_PENDING = 0
+    ORDER_STATE_PENDING = 0   #
     ORDER_STATE_CLOSED = 1
     ORDER_STATE_CANCELED = 2
     ORDER_STATE_UNKNOWN = 3
@@ -219,12 +225,31 @@ class OrderStatus(Enum):
     """
     Direction of order/trade/position.
     """
+    #
+    # ORDER_STATE_PENDING = 0
+    # ORDER_STATE_CLOSED = 1
+    # ORDER_STATE_CANCELED = 2
+    # ORDER_STATE_UNKNOWN = 3
+    # ORDER_STATE_PARTIALLY_FILLED = 4
 
-    ORDER_STATE_PENDING = 0
-    ORDER_STATE_CLOSED = 1
-    ORDER_STATE_CANCELED = 2
-    ORDER_STATE_UNKNOWN = 3
-    ORDER_STATE_PARTIALLY_FILLED = 4
+    ORDER_STATE_PENDING = 'PENDING'
+    ORDER_STATE_CLOSED =  'CLOSED'
+    ORDER_STATE_CANCELED = 'CANCELED'
+    ORDER_STATE_UNKNOWN = 'UNKNOWN'
+    ORDER_STATE_PARTIALLY_FILLED = 'PARTIALLY_FILLED'
+
+    PENDING = 'PENDING'
+    CLOSED = 'CLOSED'
+    CANCELED ='CANCELED'
+    UNKNOWN = 'UNKNOWN'
+    PARTIALLY_FILLED = 'PARTIALLY_FILLED'
+    # ORDER_STATE_PENDING = 0
+    # ORDER_STATE_CLOSED = 1
+    # ORDER_STATE_CANCELED = 2
+    # ORDER_STATE_UNKNOWN = 3
+    # ORDER_STATE_PARTIALLY_FILLED = 4
+    EXPIRED = "EXPIRED"
+    NEW = "NEW"
 
 
 class Status(Enum):
@@ -247,10 +272,12 @@ class Direction(Enum):
 
     ORDER_TYPE_BUY = 0
     ORDER_TYPE_SELL = 1
-    LONG = "多"
+    LONG = "多"   # DUOTOU
     SHORT = "空"
     NET = "净"
-
+    Buy = "BUY"
+    Sell = "SELL"
+    UNKNOWN = None
 
 class OrderOffset(Enum):
     """

@@ -4,6 +4,10 @@ General constant string used in VN Trader.
 
 from enum import Enum
 
+class ExchangeInfo:
+    symbol_type = "SPOT"
+    margin = "杠杆"
+    spot = "现货"
 
 class Direction(Enum):
     """
@@ -13,6 +17,7 @@ class Direction(Enum):
     LONG = "多"
     SHORT = "空"
     NET = "净"
+    UNKNOWN = None
 
 
 class Offset(Enum):
@@ -132,7 +137,7 @@ class Exchange(Enum):
     DERIBIT = "DERIBIT"
     GATEIO = "GATEIO"
     BITSTAMP = "BITSTAMP"
-
+    BINANCESPOT = "BINANCESPOT"
     # Special Function
     LOCAL = "LOCAL"  # For local generated data
 

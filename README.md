@@ -1,4 +1,4 @@
-# Cryptoquant- An Quantatitive trading library for crypto-assets 数字货币量化交易框架
+# Cryptoquant- An Quantatitive trading library for various Assets 开源量化交易框架
 
 <p style="align:"center"">
     <img src ="https://img.shields.io/badge/platform-windows|linux|macos-yellow.svg"/>
@@ -9,16 +9,21 @@
     <img src ="https://img.shields.io/badge/python-3.10-blue.svg"/>
 </p>
 
-
 # Cryptoquant
 
-CryptoQuant is an algorithmic trading library for crypto-assets written in Python. It allows trading strategies to be easily expressed and backtested against historical data (with daily and minute resolution), providing analytics and insights regarding a particular strategy's performance. cryptoquant also supportslive-trading of crypto-assets starting with many exchanges (Okex,Binance,Bitmex etc) with more being added over time.
+CryptoQuant is an algorithmic trading library for Quantatitive trading written in Python. It allows trading strategies to be easily expressed and backtested against historical data (with daily and minute resolution), providing analytics and insights regarding a particular strategy's performance. cryptoquant also supportslive-trading of crypto-assets starting with many exchanges (Okex,Binance,Bitmex etc) with more being added over time.
 
-CryptoQuant是一套基于Python的量化交易框架，帮助个人/机构量化人员进行数字货币量化交易。框架具有回测/实盘交易功能。 策略框架支持多个平台切换回测。 并提供交易所实盘交易接口（如OKEX) 。
+CryptoQuant是一套基于Python的量化交易框架，帮助个人/机构量化人员进行量化交易。支持对接多种接口， 框架具有回测/实盘交易功能。 策略框架支持多个平台切换回测。 并提供交易所实盘交易接口（如OKEX) 。
 
-全新的《Python数字货币量化投资实战》系列在线课程，已经在微信公众号[**StudyQuant**]上线，一整套数字货币量化解决方案。覆盖CTA等策略（已完成）等内容。
+全新的《Python数字货币量化投资实战》等系列在线课程，已经在微信公众号[**StudyQuant**]上线，一整套数字货币量化解决方案。覆盖CTA等策略（已完成）等内容。
 
 
+| 版本介绍 | 说明 | 产品与服务 | 适合人群 |
+| --- | --- | --- | --- |
+| public（开源版） | 当前开源仓库 | <br />- 开源代码可自行学习<br /> |  |
+| pro(专业版) | Python数字货币量化投资实战课程专属量化系统版本<br /><br />（年费，更新代码）  | <br />- python量化投资与CryptoQuant教学视频课程<br />- 提供封装好的现货量化接口 （支持Binance等现货）<br />- 封装好的接口示例、系统源码开发示例<br />- 策略示例<br />- 基于类的量化交易系统，更清晰的架构。<br />- 社群答疑服务<br /> | <br />- 个人量化交易员<br />- 希望快速学习量化并在crypto市场实现量化交易的<br /> |
+| vip   | 量化训练营/定制版本的量化系统 | <br />- Python量化投资训练营视频课程<br />（年费，每年更新代码）<br />- 最新的量化交易系统 <br />- 提供封装好的现货和合约量化接口 （支持Binance现货、合约） <br />-  多个经典量化策略示例 <br />-  远程技术支持和服务 <br /> | <br />- 量化交易员<br />- 希望快速学习量化并在相关市场实现量化交易的<br />- 定制相关市场接口<br /> |
+| 更多信息 | 针对专业量化的需求<br />精心架构设计并封装好的代码<br />开箱即用，帮助你更快的实现量化交易 | 添加微信 studyquant88后，领取更多示例代码 | <br /> |
 
 
 ## 版本介绍
@@ -41,14 +46,11 @@ CryptoQuant是一套基于Python的量化交易框架，帮助个人/机构量�
 ### vip（量化训练营课程）
 
 - Python量化投资训练营视频课程 （年费，包更新代码）
-- 自用的量化交易系统，经常更新代码。 
-
+- 自用的量化交易系统，经常更新代码。
 - 提供封装好的现货和合约量化接口 （支持Binance现货、合约）
 - 多个经典量化策略示例
 - 更高频率的量化交易系统
 - 远程技术支持和服务
-
-
 
 
 
@@ -341,13 +343,13 @@ For more demo code and strategy demo, Please check the course, some homeworks ma
 
 
 ## Course Links 课程链接
-| Course Links | |
-| ------------- |:-------------|
-|[股票-Python量化投资](https://appcop3i2898823.h5.xiaoeknow.com/v1/goods/goods_detail/p_5fad5523e4b0231ba88619cb?type=3)|[Course](https://appcop3i2898823.h5.xiaoeknow.com/v1/goods/goods_detail/p_5fad5523e4b0231ba88619cb?type=3)|
-|[Crypto-Python量化投资与数字货币CryptoQuant](https://appcop3i2898823.h5.xiaoeknow.com/v1/goods/goods_detail/p_5fad5331e4b0231ba88619aa?type=3)|[Course](https://appcop3i2898823.h5.xiaoeknow.com/v1/goods/goods_detail/p_5fad5331e4b0231ba88619aa?type=3)|
-|[期货-量化投资程序化交易](https://appcop3i2898823.h5.xiaoeknow.com/v1/goods/goods_detail/p_5fad53dde4b04db7c08e3ece?type=3)|[Course](https://appcop3i2898823.h5.xiaoeknow.com/v1/goods/goods_detail/p_5fad53dde4b04db7c08e3ece?type=3)|
-|[量化训练营](https://appcop3i2898823.h5.xiaoeknow.com/v1/course/column/p_604312f8e4b07d825bd93bbf?type=3)|[Course](https://appcop3i2898823.h5.xiaoeknow.com/v1/course/column/p_604312f8e4b07d825bd93bbf?type=3)|
-|[其他](https://appcop3i2898823.h5.xiaoeknow.com/homepage)|[Course](https://appcop3i2898823.h5.xiaoeknow.com)|
+| Course Links                                                                  |                                                     |
+|-------------------------------------------------------------------------------|:----------------------------------------------------|
+| [股票-Python量化投资](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ )                     | [Course](https://shimo.im/docs/5xkGMBm4d5FJyM3X/  ) |
+| [Crypto-Python量化投资与数字货币CryptoQuant](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ ) | [Course](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ )  |
+| [期货-量化投资程序化交易](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ )                      | [Course](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ )  |
+| [Stock/Futures/Options- 量化训练营](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ )      |[Course](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ )|
+| [其他](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ )                                | [Course](https://shimo.im/docs/5xkGMBm4d5FJyM3X/ )  |
 
 ## 量化开源框架
 | Quant Framework | |
@@ -386,6 +388,12 @@ wechat: studyquant88
 
 ## 开发日志
 CryptoQuant代码更新
+
+**2023-06-27   v1.6**
+
+- 更改数据结构
+- 维护CCXT接口
+
 
 2023-04-22    v1.5
 

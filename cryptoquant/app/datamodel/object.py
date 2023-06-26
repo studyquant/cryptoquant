@@ -19,6 +19,12 @@ from .constant import (
 
 ACTIVE_STATUSES = set([Status.SUBMITTING, Status.NOTTRADED, Status.PARTTRADED])
 
+@dataclass
+class LeverageInfo:
+    symbol: str
+    leverage_level:int=1 #杠杆倍数
+    marge_mode: str = "cross"
+    direction:str = Direction.LONG.value
 
 @dataclass
 class BaseData:
@@ -83,7 +89,17 @@ class TickData(BaseData):
     def __post_init__(self):
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
+        self.mid_price = (self.ask_price_1 + self.bid_price_1) /2
+        self.convert_to_fmz()
 
+    def convert_to_fmz(self):
+        self.High = self.high_price
+        self.Low = self.low_price
+        self.Sell = self.ask_price_1
+        self.Buy = self.bid_price_1
+        self.Last = self.last_price
+        self.Volume = self.last_volume
+        self.Time = self.datetime
 
 @dataclass
 class BarData(BaseData):
@@ -112,6 +128,15 @@ class BarData(BaseData):
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
 
+        self.convert_to_fmz()
+
+    def convert_to_fmz(self):
+        self.Time = self.datetime
+        self.Open = self.open_price
+        self.High = self.high_price
+        self.Low = self.low_price
+        self.Close = self.close_price
+        self.Volume = self.volume
 
 @dataclass
 class OrderData(BaseData):
@@ -133,7 +158,7 @@ class OrderData(BaseData):
     status: Status = Status.SUBMITTING
     datetime: datetime = datetime.now()
     custom_id: str = ""  # 策略定制的订单ID
-
+    custom_name: str = ""  # 策略定制的订单名字
     def __post_init__(self):
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
@@ -181,6 +206,14 @@ class TradeData(BaseData):
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
         self.vt_orderid = f"{self.gateway_name}.{self.orderid}"
         self.vt_tradeid = f"{self.gateway_name}.{self.tradeid}"
+        self.convert_to_fmz()
+
+    def convert_to_fmz(self):
+        self.Id = self.orderid
+        self.Time = self.datetime
+        self.Price = self.price
+        self.Amount = self.volume
+        self.Type = self.direction
 
 
 @dataclass
@@ -203,7 +236,17 @@ class PositionData(BaseData):
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
         self.vt_positionid = f"{self.vt_symbol}.{self.direction.value}"
+        self.convert_to_fmz()
 
+    def convert_to_fmz(self):
+        self.MarginLevel = 0  # 杠杆大小
+        self.Amount = self.volume
+        self.FrozenAmount = self.frozen
+        self.Price = self.price
+        self.Profit = self.pnl
+        self.Type = self.direction
+        self.ContractType = ""
+        self.Margin = 0  # 保证金
 
 @dataclass
 class AccountData(BaseData):
@@ -213,15 +256,21 @@ class AccountData(BaseData):
     """
 
     accountid: str
-
     balance: float = 0
     frozen: float = 0
-
+    Balance = balance
+    symbol=""
+    Stocks: float = 0
+    FrozenStocks: float = 0
     def __post_init__(self):
         """"""
         self.available = self.balance - self.frozen
         self.vt_accountid = f"{self.gateway_name}.{self.accountid}"
+        self.convert_to_fmz()
 
+    def convert_to_fmz(self):
+        self.Balance = self.balance
+        self.FrozenBalance = self.frozen
 
 @dataclass
 class LogData(BaseData):
@@ -295,16 +344,20 @@ class OrderRequest:
     price: float = 0
     offset: Offset = Offset.NONE
     orderid: str = ""
+    reference: str = ""
+    pos_side : str = Direction.UNKNOWN.value
+    custom_id: str = ""  # 策略定制的订单ID
+    custom_name: str = ""  # 策略定制的订单名字
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """"""
-        self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
+        self.vt_symbol: str = f"{self.symbol}.{self.exchange.value}"
 
-    def create_order_data(self, orderid: str, gateway_name: str):
+    def create_order_data(self, orderid: str, gateway_name: str) -> OrderData:
         """
         Create order data from request.
         """
-        order = OrderData(
+        order: OrderData = OrderData(
             symbol=self.symbol,
             exchange=self.exchange,
             orderid=orderid,
@@ -313,9 +366,14 @@ class OrderRequest:
             offset=self.offset,
             price=self.price,
             volume=self.volume,
+            custom_id=self.custom_id,
             gateway_name=gateway_name,
+            custom_name = self.custom_name
         )
         return order
+
+
+
 
 
 @dataclass
@@ -386,6 +444,20 @@ class Ticker:
     Last: float = 0
     Volume: float = 0
 
+    def __post_init__(self):
+        """"""
+        self.vt_symbol = self.symbol
+        self.ask_price_1 =self.Sell
+        self.bid_price_1 =self.Buy
+
+        self.last_price = self.Last
+        self.high_price = self.High
+        self.low_price = self.Last
+        self.limit_up = self.Last * 1.1
+
+
+        self.limit_down = self.Last * 0.9
+
 
 @dataclass
 class Record:
@@ -432,12 +504,17 @@ class Account:
     FrozenBalance: float = 0
     Stocks: float = 0
     FrozenStocks: float = 0
-
+    gateway_name:str=""
+    account_id :str=""
+    stocks = Stocks
     def __post_init__(self):
         """"""
         self.Available_balance = self.Balance - self.FrozenBalance
         self.Available_stocks = self.Stocks - self.FrozenStocks
+        self.balance = self.Balance
 
+        self.available = self.balance - self.FrozenBalance
+        self.vt_accountid = f"{self.gateway_name}.{self.account_id}"
 
 @dataclass
 class Position:

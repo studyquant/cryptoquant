@@ -286,7 +286,7 @@ class BarGenerator:
 
 
 import pandas as pd
-
+from datetime import datetime
 
 class ArrayManager(object):
     """
@@ -327,7 +327,6 @@ class ArrayManager(object):
         df["low"] = self.low_array
         df["close"] = self.close_array
         df["volume"] = self.volume_array
-        df["open"] = self.close_array
         # df = pd.DataFrame([self.open_array,self.high_array,self.low_array,self.close_array,self.volume_array ],columns=[['open','high','low','close','volume']])
         return df
 
@@ -351,6 +350,22 @@ class ArrayManager(object):
         self.low_array[-1] = bar.low_price
         self.close_array[-1] = bar.close_price
         self.volume_array[-1] = bar.volume
+
+
+    @property
+    def bar_data(self,symbol = "", gateway_name = ""):
+        bar = BarData(symbol ='',
+                      gateway_name = gateway_name,
+                      exchange = Exchange.LOCAL,
+                      datetime = datetime.now(),
+                      open_price=self.open_array[-1],
+                      high_price=self.high_array[-1],
+                      low_price=self.low_array[-1],
+                      close_price=self.close_array[-1],
+                      volume=self.volume_array[-1]
+                      )
+
+        return bar
 
     @property
     def open(self):
@@ -655,6 +670,18 @@ class ArrayManager(object):
         down = mid - atr * dev
 
         return up, down
+
+    def keltner_v2(self, n, dev, array=False):
+        """
+        Keltner Channel.
+        """
+        mid = self.sma(n, array)
+        atr = self.atr(n, array)
+
+        up = mid + atr * dev
+        down = mid - atr * dev
+
+        return up,mid, down
 
     def donchian(self, n, array=False):
         """

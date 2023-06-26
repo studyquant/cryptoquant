@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from logging import INFO
 
-from .constant import (
+from cryptoquant.trader.constant import (
     Direction,
     Exchange,
     Interval,
@@ -42,7 +42,7 @@ class TickData(BaseData):
     symbol: str
     exchange: Exchange
     datetime: datetime
-
+    # Symbol = symbol
     name: str = ""
     volume: float = 0
     open_interest: float = 0
@@ -50,7 +50,7 @@ class TickData(BaseData):
     last_volume: float = 0
     limit_up: float = 0
     limit_down: float = 0
-
+    Last_price = last_price
     open_price: float = 0
     high_price: float = 0
     low_price: float = 0
@@ -82,7 +82,10 @@ class TickData(BaseData):
 
     def __post_init__(self):
         """"""
+        self.Symbol = self.symbol
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
+
+
 
 
 @dataclass
@@ -93,7 +96,7 @@ class BarData(BaseData):
 
     symbol: str
     exchange: Exchange
-    datetime: datetime
+    datetime: datetime = None
 
     interval: Interval = None
     volume: float = 0
@@ -127,27 +130,24 @@ class OrderData(BaseData):
     traded: float = 0
     status: Status = Status.SUBMITTING
     datetime: datetime = None
-    custom_id: str = ""  # 策略定制的订单ID
+    reference: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """"""
-        self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
-        self.vt_orderid = f"{self.gateway_name}.{self.orderid}"
+        self.vt_symbol: str = f"{self.symbol}.{self.exchange.value}"
+        self.vt_orderid: str = f"{self.gateway_name}.{self.orderid}"
 
-    def is_active(self):
+    def is_active(self) -> bool:
         """
         Check if the order is active.
         """
-        if self.status in ACTIVE_STATUSES:
-            return True
-        else:
-            return False
+        return self.status in ACTIVE_STATUSES
 
-    def create_cancel_request(self):
+    def create_cancel_request(self) -> "CancelRequest":
         """
         Create cancel request object from order.
         """
-        req = CancelRequest(
+        req: CancelRequest = CancelRequest(
             orderid=self.orderid, symbol=self.symbol, exchange=self.exchange
         )
         return req
@@ -290,16 +290,18 @@ class OrderRequest:
     price: float = 0
     offset: Offset = Offset.NONE
     orderid: str = ""
+    reference: str = ""
+    pos_side : str = Direction.UNKNOWN.value # 下单后的持仓防线
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """"""
-        self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
+        self.vt_symbol: str = f"{self.symbol}.{self.exchange.value}"
 
-    def create_order_data(self, orderid: str, gateway_name: str):
+    def create_order_data(self, orderid: str, gateway_name: str) -> OrderData:
         """
         Create order data from request.
         """
-        order = OrderData(
+        order: OrderData = OrderData(
             symbol=self.symbol,
             exchange=self.exchange,
             orderid=orderid,
@@ -308,6 +310,7 @@ class OrderRequest:
             offset=self.offset,
             price=self.price,
             volume=self.volume,
+            reference=self.reference,
             gateway_name=gateway_name,
         )
         return order
@@ -343,3 +346,17 @@ class HistoryRequest:
     def __post_init__(self):
         """"""
         self.vt_symbol = f"{self.symbol}.{self.exchange.value}"
+
+if __name__ == "__main__":
+    tick = TickData(symbol="EOS",
+                    exchange=Exchange.LOCAL,
+                    datetime=datetime.now(),
+                    gateway_name="Binance",
+                    last_price=1.2,
+                    ask_price_1=1.2,
+                    bid_price_1=1.2,
+                    limit_up=1.2
+                    )
+    print(tick.Symbol)
+    print(tick.name)
+    print(tick.last_price,tick.Last_price)

@@ -8,7 +8,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
-import time
+
 
 def crossover(a, b):
     """向上突破"""
@@ -66,6 +66,34 @@ def sync_current_minute(time_frame):
         else:
             now_time -= now_time % minutes
             return now_time
+
+
+def process_account_and_strategy_setting(api_accounts: dict, strategy_setting: dict) -> dict:
+    """
+    Args:
+        api_accounts: dict, api accoutnt
+        strategy_setting:
+
+    Returns:
+
+    """
+    account_list = []
+    all_accounts = {}
+
+    for account_id, api_setting in api_accounts.items():
+        # 只有账户 和 策略相同的 才会放在一起
+        if api_setting['exchange'] == strategy_setting['exchange_name']:
+            accounts = {}
+            accounts.update(api_setting)
+            accounts['strategy_name'] = "grid"
+            if not hasattr(api_setting, "price_precise"):
+                accounts['price_precise'] = 2
+                accounts['volume_precise'] = 1
+            accounts.update(strategy_setting)
+
+            account_list.append(accounts)
+            all_accounts[accounts['account_id']] = accounts
+    return all_accounts
 
 
 if __name__ == "__main__":

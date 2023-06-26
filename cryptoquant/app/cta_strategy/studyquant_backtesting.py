@@ -801,13 +801,13 @@ class BacktestingEngine:
 
             # Check whether limit orders can be filled.
             long_cross = (
-                order.direction == Direction.LONG
+                order.direction.value == Direction.LONG.value
                 and order.price >= long_cross_price
                 and long_cross_price > 0
             )
 
             short_cross = (
-                order.direction == Direction.SHORT
+                order.direction.value == Direction.SHORT.value
                 and order.price <= short_cross_price
                 and short_cross_price > 0
             )
@@ -1142,6 +1142,7 @@ class BacktestingEngine:
         """
         msg = f"{self.datetime}\t{msg}"
         self.logs.append(msg)
+        print(msg)
 
     def send_email(self, msg: str, strategy: CtaTemplate = None):
         """

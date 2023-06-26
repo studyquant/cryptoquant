@@ -362,7 +362,10 @@ class OmsEngine(BaseEngine):
 
     def process_tick_event(self, event: Event):
         """"""
+
         tick = event.data
+        if not tick:
+            return
         self.ticks[tick.vt_symbol] = tick
 
     def process_order_event(self, event: Event):

@@ -194,7 +194,8 @@ class DoubleMaStrategy(CtaTemplate):
         current_price = self.am.close_array[-1]
 
         if cross_over:
-            if self.pos < 0:
+            # print("cross_over")
+            if self.pos == 0:
                 self.buy(current_price, 1)
             elif self.pos < 0:
                 self.cover(current_price, 1)

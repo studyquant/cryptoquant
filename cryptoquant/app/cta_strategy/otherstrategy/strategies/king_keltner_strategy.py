@@ -13,7 +13,7 @@ from cryptoquant.app.cta_strategy import (
 class KingKeltnerStrategy(CtaTemplate):
     """"""
 
-    author = "用Python的交易员"
+    author = "AgileQuant"
 
     kk_length = 11
     kk_dev = 1.6
@@ -72,6 +72,10 @@ class KingKeltnerStrategy(CtaTemplate):
 
     def on_5min_bar(self, bar: BarData):
         """"""
+        if  self.trading == False:
+            return
+        else:
+            pass
         for orderid in self.vt_orderids:
             self.cancel_order(orderid)
         self.vt_orderids.clear()

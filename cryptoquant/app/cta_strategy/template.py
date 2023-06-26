@@ -3,9 +3,11 @@ from abc import ABC
 from copy import copy
 from typing import Any, Callable
 
-from cryptoquant.trader.constant import Interval, Direction, Offset
-from cryptoquant.trader.object import BarData, TickData, OrderData, TradeData, OrderType
+from cryptoquant.app.datamodel.constant import Interval,  Offset,Direction,Exchange
+from cryptoquant.app.datamodel.object import BarData, TickData, OrderData, TradeData, OrderType,OrderRequest
 from cryptoquant.trader.utility import virtual
+# from cryptoquant.app.datamodel.constant import Direction
+from datetime import datetime
 
 # from cryptoquant.app.cta_strategy.api_gateway import fmz_template
 from .base import StopOrder, EngineType
@@ -17,7 +19,8 @@ class CtaTemplate(ABC):
     author = ""
     parameters = []
     variables = []
-
+    pos = 0
+    gateway_name = Exchange.LOCAL
     def __init__(
         self,
         cta_engine: Any,
@@ -79,6 +82,20 @@ class CtaTemplate(ABC):
             strategy_variables[name] = getattr(self, name)
         return strategy_variables
 
+    def strategy_report_markdown(self,title = ""):
+        data = self.get_data()
+        msg = f"## {title} \n" \
+              f"策略名称：{data['strategy_name']} \n" \
+              f"当前价格:{data['variables']['current_price']} \n" \
+              f"当前信号：{data['variables']['signal']} \n" \
+              f"当前持仓:{data['variables']['pos']} \n" \
+              f"## 策略参数 \n " \
+              f"{data['parameters']}\n" \
+              f"\n" \
+              f"## 策略变量 \n" \
+              f"{data['variables']} \n" \
+              f"{datetime.now()}"
+        return msg
     def get_data(self):
         """
         Get strategy data.
@@ -157,12 +174,13 @@ class CtaTemplate(ABC):
         lock: bool = False,
         order_id="",
         order_type=OrderType.LIMIT,
+        skew = 0
     ):
         """
         Send buy order to open a long position.
         """
         return self.send_order(
-            Direction.LONG, Offset.OPEN, price, volume, stop, lock, order_id, order_type
+            Direction.LONG, Offset.OPEN, price-skew, volume, stop, lock, order_id, order_type
         )
 
     def sell(
@@ -173,6 +191,7 @@ class CtaTemplate(ABC):
         lock: bool = False,
         order_id="",
         order_type=OrderType.LIMIT,
+        skew=0
     ):
         """
         Send sell order to close a long position.
@@ -180,7 +199,7 @@ class CtaTemplate(ABC):
         return self.send_order(
             Direction.SHORT,
             Offset.CLOSE,
-            price,
+            price+skew,
             volume,
             stop,
             lock,
@@ -196,6 +215,7 @@ class CtaTemplate(ABC):
         lock: bool = False,
         order_id="",
         order_type=OrderType.LIMIT,
+        skew=0
     ):
         """
         Send short order to open as short position.
@@ -203,7 +223,7 @@ class CtaTemplate(ABC):
         return self.send_order(
             Direction.SHORT,
             Offset.OPEN,
-            price,
+            price+skew,
             volume,
             stop,
             lock,
@@ -219,6 +239,7 @@ class CtaTemplate(ABC):
         lock: bool = False,
         order_id="",
         order_type=OrderType.LIMIT,
+        skew=0
     ):
         """
         Send cover order to close a short position.
@@ -226,13 +247,104 @@ class CtaTemplate(ABC):
         return self.send_order(
             Direction.LONG,
             Offset.CLOSE,
-            price,
+            price-skew,
             volume,
             stop,
             lock,
             order_id,
             order_type,
         )
+
+
+    def Buy(self, price: float, volume: float, order_id='', order_type=OrderType.LIMIT,symbol=None,pos_side = Direction.LONG):
+        """
+        Send buy order to open a long position.
+        args:
+            pos_side :
+        """
+        req = self.get_order_request(price= price, volume=volume,  direction=Direction.LONG, order_id=order_id, pos_side=pos_side,order_type=order_type,offset=Offset.OPEN)
+        order = self.send_order_by_req(req)
+        return order
+
+    def Sell(self, price: float, volume: float, order_id='', order_type=OrderType.LIMIT,symbol=None,pos_side = Direction.SHORT):
+        """
+        Send buy order to open a long position.
+        args:
+            pos_side :
+        """
+        req = self.get_order_request(price= price, volume=volume,  direction=Direction.SHORT, order_id=order_id, pos_side=pos_side,order_type=order_type,offset=Offset.CLOSE)
+        order = self.send_order_by_req(req)
+        return order
+
+    def SellShort(self, price: float, volume: float, order_id='', order_type=OrderType.LIMIT,symbol=None,pos_side = Direction.SHORT):
+        """
+        Send buy order to open a long position.
+        args:
+            pos_side :
+        """
+        req = self.get_order_request(price= price, volume=volume,  direction=Direction.LONG, order_id=order_id, pos_side=pos_side,order_type=order_type,offset=Offset.CLOSE)
+        order = self.send_order_by_req(req)
+        return order
+
+    def Short(self, price: float, volume: float, order_id='', order_type=OrderType.LIMIT,symbol=None,pos_side = Direction.SHORT):
+        """
+        Send buy order to open a long position.
+        args:
+            pos_side :
+        """
+        req = self.get_order_request(price= price, volume=volume, direction=Direction.SHORT, order_id=order_id, pos_side=pos_side,order_type=order_type,offset=Offset.OPEN)
+        order = self.send_order_by_req(req)
+        return order
+
+    def get_order_request(self,price: float, volume: float,  direction:Direction ,order_id='', symbol=None, pos_side=Direction.UNKNOWN,order_type=OrderType.LIMIT,offset=Offset.NONE):
+        if not symbol:
+            symbol = self.symbol
+        req = OrderRequest(symbol = self.symbol,
+                           exchange= self.gateway_name,
+                           direction= direction,
+                           type = order_type,
+                           price = price,
+                           volume = volume,
+                           orderid = order_id,
+                           offset = offset,
+                           # reference= self.gateway_name,
+                           pos_side = pos_side
+                           )
+        return req
+
+    # def Order(self, ):
+
+
+    def send_order_by_req(self,req:OrderRequest):
+        if self.trading:
+            order_data = self.cta_engine.send_order_by_req(req)
+            self.process_order_data(order_data)
+        else:
+            self.write_log(f'策略状态:{self.trading}')
+            order_data = None
+        return order_data
+
+
+    def process_order_data(self, order_data: OrderData,return_order_id_with_list = False)->OrderData:
+        """
+        处理返回订单数据
+        Args:
+            order_data:
+            return_order_id_with_list:
+
+        Returns:
+        """
+        if return_order_id_with_list:
+            if isinstance(order_data,OrderData):
+                return [order_data.orderid]  # 返回订单
+            else:
+                return []
+        # 返回order数据类即可
+        else:
+            return order_data
+
+
+
 
     def send_order(
         self,
@@ -249,12 +361,16 @@ class CtaTemplate(ABC):
         Send a new order.
         """
         if self.trading:
-            vt_orderids = self.cta_engine.send_order(
+            order_data = self.cta_engine.send_order(
                 self, direction, offset, price, volume, stop, lock, order_id, order_type
             )
-            return vt_orderids  # 返回订单
+            if isinstance(order_data,OrderData):
+                return [order_data.orderid]  # 返回订单
+            else:
+                return []
+
         else:
-            # print('策略交易未开启')
+            self.write_log('策略交易未开启')
             return []
 
     def cancel_order(self, vt_orderid: str):
@@ -275,6 +391,7 @@ class CtaTemplate(ABC):
         """
         Write a log message.
         """
+        self.msg = msg
         self.cta_engine.write_log(msg, self)
 
     def get_engine_type(self):

@@ -60,6 +60,7 @@ class EventEngine:
             try:
                 # print('run event _run')
                 event = self._queue.get(block=True, timeout=1)
+                # print(f"queue size:{len(self._queue.queue) } {self._queue.qsize()}" )
                 self._process(event)
             except Empty:
                 # print('empty')
@@ -115,7 +116,7 @@ class EventEngine:
         """
         self._active = True
         self._thread.start()
-        # self._timer.start()
+        self._timer.start()
 
     def stop(self):
         """
@@ -178,9 +179,9 @@ if __name__ == "__main__":
 
     def get_price(data):
         if event.type == "tick":
-            print(event.data)
+            print("tick price",event.data)
 
-    engine = EventEngine()
+    engine = EventEngine(5)
     # 2. 启动EventEngine.
     engine.start()
     # 3. 注册要监听处理的事件。

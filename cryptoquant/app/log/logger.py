@@ -58,15 +58,18 @@ def log_engine(name):
     logger = logging.getLogger(name)
     logger.setLevel(level=logging.INFO)
 
-    rq = time.strftime("%Y%m%d%H%M", time.localtime(time.time()))
+    rq = time.strftime("%Y-%m-%d-%H-%M", time.localtime(time.time()))
     current_path = os.getcwd()
-    path = os.path.join(current_path, "log")
-    # log_path = os.path.dirname(os.getcwd()) + '/logs/'
-    log_name = path + rq + ".txt"
+    # path = os.path.join(current_path, "log")
+    # log_path = os.path.dirname(os.getcwd())
+
+    log_path = os.path.join(current_path,'logs')
+    if not os.path.exists(log_path):
+        os.makedirs(log_path)
+    log_name = os.path.join(log_path ,name+'_' +rq + ".txt")
 
     handler = logging.FileHandler(log_name)
     handler.setLevel(logging.INFO)
-
     logger.addHandler(handler)
 
     # 设置格式
@@ -74,12 +77,6 @@ def log_engine(name):
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
     handler.setFormatter(formatter)
-    # logger.addHandler(handler)
-    # 写在文件中
-    # logger.info("Start print log")
-    # logger.debug("Do something")
-    # logger.warning("Something maybe fail.")
-    # logger.info("Finish")
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
     console.setFormatter(formatter)  # 添加CONSOLE 的打印格式
@@ -100,11 +97,11 @@ class LogEngine:
 if __name__ == "__main__":
     pass
     # logger = StrategyLogger('test2','test.log')
+    # logger.logger.info("start")
     # text=
     # logger2 = log_engine(';test')
     # logger2 = StrategyLogger('name')
-    # logger2.warning('okex | test')
-    log = LogEngine("start")
-    log.info("start")
-
-    log.info("start")
+    # logger2.info('okex | test')
+    log = LogEngine("OK")
+    log.info("start log")
+    # log.info("start")

@@ -13,3 +13,4 @@ itchat
 dataclasses
 plotly
 deap
+tigeropen 
